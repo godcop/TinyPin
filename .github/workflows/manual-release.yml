@@ -163,6 +163,10 @@ jobs:
             
             # 使用相对于脚本文件的路径，输出到脚本目录下的 build\installer
             $scriptOutputDir = "build\installer"
+            
+            Write-Host "🔧 执行 Inno Setup 编译:"
+            Write-Host "  - 命令: $isccPath $scriptPath /Dp=$platform /Ds=$relativeSourcePath /Do=$scriptOutputDir /Dv=$version"
+            
             & $isccPath $scriptPath /Dp=$platform /Ds=$relativeSourcePath /Do=$scriptOutputDir /Dv=$version
             
             if ($LASTEXITCODE -ne 0) {
@@ -171,15 +175,39 @@ jobs:
             }
             
             # 检查 Inno Setup 实际输出的安装包路径（在脚本目录下）
-            $scriptInstallerPath = "tools\Scripts\$scriptOutputDir\TinyPin-$version-$platform-setup.exe"
+            # 注意：如果版本号未正确传递，Inno Setup 可能使用默认版本号 1.0.0
+            $possibleVersions = @($version, "1.0.0")
+            $scriptInstallerPath = $null
+            $actualVersion = $null
+            
+            foreach ($testVersion in $possibleVersions) {
+              $testPath = "tools\Scripts\$scriptOutputDir\TinyPin-$testVersion-$platform-setup.exe"
+              if (Test-Path $testPath) {
+                $scriptInstallerPath = $testPath
+                $actualVersion = $testVersion
+                break
+              }
+            }
+            
             $finalInstallerPath = "$outputDir\TinyPin-$version-$platform-setup.exe"
             
             Write-Host "🔍 安装包路径检查:"
+            Write-Host "  - 期望版本: $version"
+            Write-Host "  - 实际版本: $actualVersion"
             Write-Host "  - 脚本输出路径: $scriptInstallerPath"
-            Write-Host "  - 脚本输出存在: $(Test-Path $scriptInstallerPath)"
+            Write-Host "  - 脚本输出存在: $(if ($scriptInstallerPath) { Test-Path $scriptInstallerPath } else { 'false' })"
             Write-Host "  - 最终目标路径: $finalInstallerPath"
             
-            if (Test-Path $scriptInstallerPath) {
+            # 列出脚本输出目录的所有文件
+            $scriptOutputFullPath = "tools\Scripts\$scriptOutputDir"
+            if (Test-Path $scriptOutputFullPath) {
+              Write-Host "  - 脚本输出目录内容:"
+              Get-ChildItem $scriptOutputFullPath | ForEach-Object {
+                Write-Host "    📄 $($_.Name)"
+              }
+            }
+            
+            if ($scriptInstallerPath -and (Test-Path $scriptInstallerPath)) {
               # 确保目标目录存在
               $targetDir = Split-Path $finalInstallerPath -Parent
               if (!(Test-Path $targetDir)) {
@@ -187,18 +215,33 @@ jobs:
               }
               
               # 移动安装包到最终位置
+              Write-Host "📦 移动安装包: $scriptInstallerPath -> $finalInstallerPath"
               Move-Item -Path $scriptInstallerPath -Destination $finalInstallerPath -Force
               
               if (Test-Path $finalInstallerPath) {
                 $size = (Get-Item $finalInstallerPath).Length
                 Write-Host "✓ $platform 安装包创建成功 (大小: $([math]::Round($size/1MB, 2)) MB)"
                 Write-Host "  - 最终路径: $finalInstallerPath"
+                if ($actualVersion -ne $version) {
+                  Write-Host "  ⚠️ 注意: 实际版本号 ($actualVersion) 与期望版本号 ($version) 不匹配"
+                }
               } else {
                 Write-Error "$platform 安装包移动失败"
                 exit 1
               }
             } else {
-              Write-Error "$platform 安装包文件未找到: $scriptInstallerPath"
+              Write-Error "$platform 安装包文件未找到"
+              Write-Host "❌ 调试信息:"
+              Write-Host "  - 检查的路径: $scriptInstallerPath"
+              Write-Host "  - 脚本输出目录: $scriptOutputFullPath"
+              if (Test-Path $scriptOutputFullPath) {
+                Write-Host "  - 目录中的文件:"
+                Get-ChildItem $scriptOutputFullPath | ForEach-Object {
+                  Write-Host "    📄 $($_.Name)"
+                }
+              } else {
+                Write-Host "  - 脚本输出目录不存在"
+              }
               exit 1
             }
           }

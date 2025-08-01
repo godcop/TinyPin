@@ -2,6 +2,7 @@
 #include "window/window_helper.h"
 #include "window/window_cache.h"  // 添加窗口缓存支持
 #include "core/application.h"
+#include "resource.h"  // 包含资源ID定义
 
 // 安全获取窗口文本（公共函数）
 std::wstring Window::getWindowText(HWND wnd) {
@@ -225,9 +226,10 @@ void Window::enableGroup(HWND wnd, int id, bool mode)
         RECT groupRect;
         bool enable;
         HWND groupWnd;
+        HWND parentWnd;
     };
     
-    EnableData data = { rc1, mode, group };
+    EnableData data = { rc1, mode, group, wnd };
     
     // 枚举所有子控件，启用/禁用在组框内的控件
     EnumChildWindows(wnd, [](HWND child, LPARAM lParam) -> BOOL {
@@ -235,6 +237,15 @@ void Window::enableGroup(HWND wnd, int id, bool mode)
         
         // 跳过组框本身
         if (child == data->groupWnd) {
+            return TRUE;
+        }
+        
+        // 获取控件ID，跳过控制复选框
+        int childId = GetDlgCtrlID(child);
+        
+        // 跳过自动功能的启用复选框和热键功能的启用复选框
+        // 这些复选框应该始终保持可用状态，因为它们是用来控制整个组的
+        if (childId == IDC_AUTOPIN_ON || childId == IDC_HOTKEYS_ON) {
             return TRUE;
         }
         

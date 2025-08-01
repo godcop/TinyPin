@@ -1,0 +1,160 @@
+{
+  "language_info": {
+    "name": "简体中文",
+    "code": "zh_CN",
+    "version": "1.0.0"
+  },
+  "dialogs": {
+    "about": {
+      "title": "关于 微钉",
+      "version": "微钉 v1.0.0 - 免费软件\n版权所有 © 2025 by godcop",
+      "copyright": "版权所有",
+      "description": "将任何窗口置顶的小工具",
+      "pins_used": "已使用图钉:",
+      "email": "邮箱:",
+      "website": "网站:",
+      "ok": "确定"
+    },
+    "edit_rule": {
+      "title": "编辑规则",
+      "rule_group": "规则",
+      "description_label": "描述(&D)",
+      "title_label": "标题(&T)",
+      "class_label": "类(&C)",
+      "description": "描述(&D):",
+      "window_title": "标题(&T):",
+      "window_class": "类(&C):",
+      "enabled": "启用",
+      "ok": "确定",
+      "cancel": "取消"
+    },
+    "pins": {
+      "title": "图钉",
+      "icon_group": "图钉图标",
+      "tracking_label": "跟踪速率(&T)",
+      "ms_label": "毫秒",
+      "activation_group": "托盘图标激活(&A)",
+      "system_group": "系统",
+      "pin_icon": "图钉图标",
+      "icon_file": "图标文件(&I)",
+      "change": "更改(&C)",
+      "reset_default": "恢复默认",
+      "tracking_rate": "跟踪速率(&T)",
+      "ms": "毫秒",
+      "tray_activation": "托盘图标激活(&A)",
+      "single_click": "单击",
+      "double_click": "双击",
+      "system": "系统",
+      "run_on_startup": "系统启动时运行"
+    },
+    "autopin": {
+      "title": "自动",
+      "delay_label": "延迟(&L)",
+      "ms_label": "毫秒",
+      "enable": "启用(&N)",
+      "delay": "延迟(&L)",
+      "ms": "毫秒",
+      "rules": "规则:",
+      "add": "添加(&A)",
+      "edit": "编辑(&E)",
+      "remove": "移除(&R)",
+      "move_up": "上移(&U)",
+      "move_down": "下移(&D)"
+    },
+    "hotkeys": {
+      "title": "热键",
+      "pinmode_label": "进入图钉模式(&M)",
+      "toggle_label": "切换活动窗口图钉(&T)",
+      "enable": "启用(&E)",
+      "enter_pin_mode": "进入图钉模式(&M)",
+      "toggle_pin": "切换活动窗口图钉(&T)"
+    },
+    "language": {
+      "title": "语言",
+      "interface_group": "界面(&I)",
+      "ui_language": "界面(&I)",
+      "auto_detect": "自动检测",
+      "restart_required": "语言更改将在重启程序后完全生效。"
+    },
+    "options": {
+      "title": "微钉 选项",
+      "ok": "确定",
+      "cancel": "取消",
+      "apply": "应用"
+    }
+  },
+  "tray": {
+    "pin_mode": "进入图钉模式(&E)",
+    "remove_all_pins": "移除所有图钉(&R)",
+    "options": "选项(&O)",
+    "about": "关于(&A)",
+    "exit": "关闭 微钉(&C)"
+  },
+  "errors": {
+    "window_class_registration": "无法注册窗口类",
+    "main_window_creation": "无法创建主窗口",
+    "invalid_value": "无效值",
+    "out_of_range": "值超出范围"
+  },
+  "warnings": {
+    "resource_load_failed": "无法加载资源",
+    "setting_save_failed": "无法保存设置"
+  },
+  "tooltips": {
+    "pin_window": "图钉此窗口",
+    "unpin_window": "取消图钉此窗口",
+    "enter_pin_mode": "进入图钉模式",
+    "drag_title_tooltip": "拖拽图标获取窗口标题",
+    "drag_class_tooltip": "拖拽图标获取窗口类名"
+  },
+  "common": {
+    "ok": "确定",
+    "cancel": "取消",
+    "apply": "应用",
+    "yes": "是",
+    "no": "否",
+    "information": "信息",
+    "warning": "警告",
+    "error": "错误",
+    "critical_error": "严重错误",
+    "system_error": "系统错误",
+    "unknown_system_error": "未知系统错误",
+    "resource_string_load_error": "错误: 无法加载资源字符串 ID %u",
+    "restart_required": "语言更改将在重启程序后完全生效。"
+  },
+  "strings": {
+    "error_title": "%1 错误",
+    "warning_title": "%1 警告",
+    "options_title": "微钉 选项",
+    "ui_range_warning": "%1 必须在 %2!d! 和 %3!d! 之间",
+    "new_rule_description": "<新建>",
+    "language": "简体中文 v1.0.0",
+    "hotkeys_set_error": "无法设置某些热键。\r\n\r\n请检查选项对话框中指定的热键是否已被其他应用程序使用。",
+    "dialog_create_error": "无法创建对话框",
+    "mutex_fail_confirm": "无法检查 微钉 是否已在运行。\r\n\r\n是否仍要启动？",
+    "window_class_register_error": "无法注册窗口类",
+    "set_pin_parent_fail": "无法设置图钉的父窗口",
+    "set_topmost_fail": "该窗口不支持置顶",
+    "could_not_find_window": "无法找到窗口",
+    "already_topmost": "窗口已经置顶",
+    "cannot_pin_desktop": "无法固定桌面",
+    "cannot_pin_taskbar": "无法固定任务栏",
+    "pin_window_error": "无法固定窗口",
+    "pin_create_error": "无法创建图钉",
+    "already_running": "微钉 已在运行",
+    "common_controls_init_error": "无法加载通用控件",
+    "hook_dll_error": "无法加载钩子 DLL。\r\n\r\n自动图钉功能已关闭。",
+    "tray_set_window_error": "无法设置托盘图标窗口",
+    "tray_create_error": "无法创建托盘图标",
+    "tray_tip": "图钉",
+    "logging_init_failed": "无法初始化日志系统",
+    "language_manager_init_failed": "无法初始化语言管理器",
+    "common_controls_init_failed": "无法初始化通用控件库，程序退出",
+    "json_file_open_failed": "无法打开JSON文件",
+    "build_info": "构建版本: Release",
+    "language_file_load_failed": "无法加载语言文件: %s\r\n恢复为英文界面。",
+    "window_class_register_failed": "无法注册窗口类，程序退出",
+    "main_window_create_failed": "无法创建主窗口，程序退出",
+    "settings_save_failed": "无法保存设置到INI文件"
+  }
+}

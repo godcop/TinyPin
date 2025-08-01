@@ -1,0 +1,53 @@
+# IDE和编辑器文件
+.vscode/
+.vs/
+*.code-workspace
+*.user
+*.suo
+*.sdf
+*.opensdf
+*.vcxproj.filters
+
+# 本地配置文件
+*.local
+local.properties
+
+# 构建输出目录
+build/
+Debug/
+Release/
+x64/
+Win32/
+arm64/
+
+# 编译生成的文件
+*.obj
+*.pch
+*.pdb
+*.idb
+*.res
+*.tlog
+*.log
+*.ilk
+*.exp
+*.lib
+*.exe
+*.dll
+
+# 临时文件
+*.tmp
+*.temp
+*~
+*.bak
+*.swp
+
+# 临时上传目录
+temp/
+doc_temp/
+
+# 日志文件
+log/
+*.log
+test/
+
+.trae/

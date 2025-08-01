@@ -1,0 +1,160 @@
+{
+  "language_info": {
+    "name": "Deutsch",
+    "code": "de_DE",
+    "version": "1.0.0"
+  },
+  "dialogs": {
+    "about": {
+      "title": "Über TinyPin",
+      "version": "TinyPin v1.0.0 - Freeware\nCopyright © 2025 von godcop",
+      "copyright": "Copyright",
+      "description": "Ein Dienstprogramm zum Anheften beliebiger Fenster im Vordergrund",
+      "pins_used": "Verwendete Pins:",
+      "email": "E-Mail:",
+      "website": "Website:",
+      "ok": "OK"
+    },
+    "edit_rule": {
+      "title": "Regel bearbeiten",
+      "rule_group": "Regel",
+      "description_label": "&Beschreibung",
+      "title_label": "&Titel",
+      "class_label": "&Klasse",
+      "description": "&Beschreibung:",
+      "window_title": "&Titel:",
+      "window_class": "&Klasse:",
+      "enabled": "Aktiviert",
+      "ok": "OK",
+      "cancel": "Abbrechen"
+    },
+    "pins": {
+      "title": "Pins",
+      "icon_group": "Pin-Symbol",
+      "tracking_label": "&Verfolgungsrate",
+      "ms_label": "ms",
+      "activation_group": "Taskleisten-Symbol &Aktivierung",
+      "system_group": "System",
+      "pin_icon": "Pin-Symbol",
+      "icon_file": "&Symbol-Datei",
+      "change": "&Ändern",
+      "reset_default": "Standard zurücksetzen",
+      "tracking_rate": "&Verfolgungsrate",
+      "ms": "ms",
+      "tray_activation": "Taskleisten-Symbol &Aktivierung",
+      "single_click": "Einfachklick",
+      "double_click": "Doppelklick",
+      "system": "System",
+      "run_on_startup": "Beim Systemstart ausführen"
+    },
+    "autopin": {
+      "title": "Auto-Pin",
+      "delay_label": "Verzögerung(&L)",
+      "ms_label": "ms",
+      "enable": "Aktivieren(&E)",
+      "delay": "Verzögerung(&L)",
+      "ms": "ms",
+      "rules": "Regeln:",
+      "add": "&Hinzufügen",
+      "edit": "&Bearbeiten",
+      "remove": "&Entfernen",
+      "move_up": "&Nach oben",
+      "move_down": "&Nach unten"
+    },
+    "hotkeys": {
+      "title": "Tastenkürzel",
+      "pinmode_label": "Pin-Modus aktivieren(&M)",
+      "toggle_label": "Aktives Fenster-Pin umschalten(&T)",
+      "enable": "Aktivieren(&E)",
+      "enter_pin_mode": "Pin-Modus aktivieren(&M)",
+      "toggle_pin": "Aktives Fenster-Pin umschalten(&T)"
+    },
+    "language": {
+      "title": "Sprache",
+      "interface_group": "&Benutzeroberfläche",
+      "ui_language": "&Benutzeroberfläche",
+      "auto_detect": "Automatisch erkennen",
+      "restart_required": "Sprachänderungen werden nach einem Neustart des Programms vollständig wirksam."
+    },
+    "options": {
+      "title": "TinyPin-Optionen",
+      "ok": "OK",
+      "cancel": "Abbrechen",
+      "apply": "Anwenden"
+    }
+  },
+  "tray": {
+    "pin_mode": "&Pin-Modus aktivieren",
+    "remove_all_pins": "&Alle Pins entfernen",
+    "options": "&Optionen",
+    "about": "&Über",
+    "exit": "&TinyPin schließen"
+  },
+  "errors": {
+    "window_class_registration": "Fensterklasse konnte nicht registriert werden",
+    "main_window_creation": "Hauptfenster konnte nicht erstellt werden",
+    "invalid_value": "Ungültiger Wert",
+    "out_of_range": "Wert außerhalb des Bereichs"
+  },
+  "warnings": {
+    "resource_load_failed": "Ressource konnte nicht geladen werden",
+    "setting_save_failed": "Einstellungen konnten nicht gespeichert werden"
+  },
+  "tooltips": {
+    "pin_window": "Dieses Fenster anheften",
+    "unpin_window": "Dieses Fenster lösen",
+    "enter_pin_mode": "Pin-Modus aktivieren",
+    "drag_title_tooltip": "Symbol ziehen, um Fenstertitel zu erhalten",
+    "drag_class_tooltip": "Symbol ziehen, um Fensterklasse zu erhalten"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Abbrechen",
+    "apply": "Anwenden",
+    "yes": "Ja",
+    "no": "Nein",
+    "information": "Information",
+    "warning": "Warnung",
+    "error": "Fehler",
+    "critical_error": "Kritischer Fehler",
+    "system_error": "Systemfehler",
+    "unknown_system_error": "Unbekannter Systemfehler",
+    "resource_string_load_error": "Fehler: Ressourcenstring ID %u konnte nicht geladen werden",
+    "restart_required": "Sprachänderungen werden nach einem Neustart des Programms vollständig wirksam."
+  },
+  "strings": {
+    "error_title": "%1 Fehler",
+    "warning_title": "%1 Warnung",
+    "options_title": "TinyPin-Optionen",
+    "ui_range_warning": "%1 muss zwischen %2!d! und %3!d! liegen",
+    "new_rule_description": "<Neu>",
+    "language": "Deutsch v1.0.0",
+    "hotkeys_set_error": "Einige Tastenkürzel konnten nicht gesetzt werden.\r\n\r\nBitte überprüfen Sie, ob die im Optionsdialog angegebenen Tastenkürzel bereits von anderen Anwendungen verwendet werden.",
+    "dialog_create_error": "Dialog konnte nicht erstellt werden",
+    "mutex_fail_confirm": "Konnte nicht überprüfen, ob TinyPin bereits läuft.\r\n\r\nTrotzdem starten?",
+    "window_class_register_error": "Fensterklasse konnte nicht registriert werden",
+    "set_pin_parent_fail": "Pin-Elternfenster konnte nicht gesetzt werden",
+    "set_topmost_fail": "Dieses Fenster unterstützt nicht die oberste Ebene",
+    "could_not_find_window": "Fenster konnte nicht gefunden werden",
+    "already_topmost": "Fenster ist bereits im Vordergrund",
+    "cannot_pin_desktop": "Desktop kann nicht angeheftet werden",
+    "cannot_pin_taskbar": "Taskleiste kann nicht angeheftet werden",
+    "pin_window_error": "Fenster konnte nicht angeheftet werden",
+    "pin_create_error": "Pin konnte nicht erstellt werden",
+    "already_running": "TinyPin läuft bereits",
+    "common_controls_init_error": "Common Controls konnten nicht geladen werden",
+    "hook_dll_error": "Hook-DLL konnte nicht geladen werden.\r\n\r\nAuto-Pin-Funktionalität wurde deaktiviert.",
+    "tray_set_window_error": "Taskleisten-Symbol-Fenster konnte nicht gesetzt werden",
+    "tray_create_error": "Taskleisten-Symbol konnte nicht erstellt werden",
+    "tray_tip": "Pin",
+    "logging_init_failed": "Initialisierung des Logging-Systems fehlgeschlagen",
+    "language_manager_init_failed": "Initialisierung des Sprachmanagers fehlgeschlagen",
+    "common_controls_init_failed": "Initialisierung der Common Controls-Bibliothek fehlgeschlagen, beende",
+    "json_file_open_failed": "JSON-Datei konnte nicht geöffnet werden",
+    "build_info": "Build: Release",
+    "language_file_load_failed": "Sprachdatei konnte nicht geladen werden: %s\r\nZurück zur englischen Benutzeroberfläche.",
+    "window_class_register_failed": "Fensterklasse-Registrierung fehlgeschlagen, beende",
+    "main_window_create_failed": "Hauptfenster-Erstellung fehlgeschlagen, beende",
+    "settings_save_failed": "Speichern der Einstellungen in INI-Datei fehlgeschlagen"
+  }
+}

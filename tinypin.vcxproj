@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|arm64">
+      <Configuration>Debug</Configuration>
+      <Platform>arm64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|arm64">
+      <Configuration>Release</Configuration>
+      <Platform>arm64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <ProjectGuid>{54275C0E-B43E-4C6F-83DA-565793AFE930}</ProjectGuid>
+    <RootNamespace>TinyPin</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <!-- 所有配置的通用设置 -->
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <!-- 通用属性表导入 -->
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>17.0.31903.59</_ProjectFileVersion>
+  </PropertyGroup>
+  <!-- 共享属性：所有配置通用 -->
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)build\compile\$(Configuration)\$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)build\compile\intermediate\$(Configuration)\$(Platform)\</IntDir>
+    <IncludePath>$(ProjectDir)include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  
+  <!-- Debug配置特定属性 -->
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  
+  <!-- Release配置特定属性 -->
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <!-- 所有配置的共享编译设置 -->
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>core\stdafx.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>comctl32.lib;msimg32.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>$(OutDir)TinyPin.tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Manifest>
+      <AdditionalManifestFiles>$(ProjectDir)resources\TinyPin.exe.manifest</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
+  
+  <!-- Debug配置特定设置 -->
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  
+  <!-- Release配置特定设置 -->
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+    </ClCompile>
+    <Link>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+    </Link>
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  
+  <!-- Win32平台特定设置 -->
+  <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
+    <Midl>
+      <TargetEnvironment>Win32</TargetEnvironment>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <!-- 核心模块 -->
+    <ClCompile Include="src\core\main.cpp" />
+    <ClCompile Include="src\core\application.cpp" />
+    <ClCompile Include="src\core\stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    
+    <!-- UI模块 -->
+    <ClCompile Include="src\ui\main_window.cpp" />
+    <ClCompile Include="src\ui\tray_icon.cpp" />
+    
+    <!-- 选项模块 -->
+    <ClCompile Include="src\options\options.cpp" />
+    <ClCompile Include="src\options\options_dialog.cpp" />
+    <ClCompile Include="src\options\auto_pin_options.cpp" />
+    <ClCompile Include="src\options\hotkey_options.cpp" />
+    <ClCompile Include="src\options\language_options.cpp" />
+    <ClCompile Include="src\options\pin_options.cpp" />
+    
+    <!-- 图钉模块 -->
+    <ClCompile Include="src\pin\pin_window.cpp" />
+    <ClCompile Include="src\pin\pin_shape.cpp" />
+    <ClCompile Include="src\pin\pin_layer_window.cpp" />
+    
+    <!-- 平台模块 -->
+    <ClCompile Include="src\platform\system_info.cpp" />
+    <ClCompile Include="src\platform\library_manager.cpp" />
+    <ClCompile Include="src\platform\process_manager.cpp" />
+    
+    <!-- 基础模块 -->
+    <ClCompile Include="src\foundation\file_utils.cpp" />
+    <ClCompile Include="src\foundation\string_utils.cpp" />
+    <ClCompile Include="src\foundation\error_handler.cpp" />
+    
+    <!-- 工具模块 -->
+    <ClCompile Include="src\pin\auto_pin_manager.cpp" />
+    <ClCompile Include="src\graphics\font_utils.cpp" />
+    <ClCompile Include="src\platform\registry_utils.cpp" />
+    <ClCompile Include="src\ui\dialog_utils.cpp" />
+    <ClCompile Include="src\foundation\resource_utils.cpp" />
+    <ClCompile Include="src\ui\custom_controls.cpp" />
+    
+    <!-- 窗口模块 -->
+    <ClCompile Include="src\window\window_helper.cpp" />
+    <ClCompile Include="src\window\window_detector.cpp" />
+    <ClCompile Include="src\window\window_monitor.cpp" />
+    <ClCompile Include="src\window\window_cache.cpp" />
+    
+    <!-- 图形模块 -->
+    <ClCompile Include="src\graphics\window_highlighter.cpp" />
+    <ClCompile Include="src\graphics\drawing_utils.cpp" />
+    <ClCompile Include="src\graphics\color_utils.cpp" />
+    <ClCompile Include="src\graphics\geometry_utils.cpp" />
+    <ClCompile Include="src\graphics\dpi_manager.cpp" />
+    
+    <!-- 图钉模块 -->
+    <ClCompile Include="src\pin\pin_manager.cpp" />
+    
+    <!-- 系统模块 -->
+    <ClCompile Include="src\system\language_manager.cpp" />
+    <ClCompile Include="src\system\logger.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- 核心模块头文件 -->
+    <ClInclude Include="include\core\application.h" />
+    <ClInclude Include="include\core\common.h" />
+    <ClInclude Include="include\core\stdafx.h" />
+    
+    <!-- UI模块头文件 -->
+    <ClInclude Include="include\ui\main_window.h" />
+    <ClInclude Include="include\ui\tray_icon.h" />
+    
+    <!-- 选项模块头文件 -->
+    <ClInclude Include="include\options\options.h" />
+    <ClInclude Include="include\options\options_dialog.h" />
+    <ClInclude Include="include\options\auto_pin_options.h" />
+    <ClInclude Include="include\options\hotkey_options.h" />
+    <ClInclude Include="include\options\language_options.h" />
+    <ClInclude Include="include\options\pin_options.h" />
+    
+    <!-- 图钉模块头文件 -->
+    <ClInclude Include="include\pin\pin_window.h" />
+    <ClInclude Include="include\pin\pin_shape.h" />
+    <ClInclude Include="include\pin\pin_layer_window.h" />
+    <ClInclude Include="include\pin\pin_manager.h" />
+    
+    <!-- 平台模块头文件 -->
+    <ClInclude Include="include\platform\system_info.h" />
+    <ClInclude Include="include\platform\library_manager.h" />
+    <ClInclude Include="include\platform\process_manager.h" />
+    
+    <!-- 基础模块头文件 -->
+    <ClInclude Include="include\foundation\file_utils.h" />
+    <ClInclude Include="include\foundation\string_utils.h" />
+    <ClInclude Include="include\foundation\error_handler.h" />
+    
+    <!-- 工具模块头文件 -->
+    <ClInclude Include="include\utils\utilities.h" />
+    <ClInclude Include="include\pin\auto_pin_manager.h" />
+    <ClInclude Include="include\graphics\font_utils.h" />
+    <ClInclude Include="include\platform\registry_utils.h" />
+    <ClInclude Include="include\ui\dialog_utils.h" />
+    <ClInclude Include="include\foundation\resource_utils.h" />
+    <ClInclude Include="include\ui\custom_controls.h" />
+    
+    <!-- 窗口模块头文件 -->
+    <ClInclude Include="include\window\window_helper.h" />
+    <ClInclude Include="include\window\window_detector.h" />
+    <ClInclude Include="include\window\window_monitor.h" />
+    <ClInclude Include="include\window\window_cache.h" />
+    
+    <!-- 图形模块头文件 -->
+    <ClInclude Include="include\graphics\window_highlighter.h" />
+    <ClInclude Include="include\graphics\drawing_utils.h" />
+    <ClInclude Include="include\graphics\color_utils.h" />
+    <ClInclude Include="include\graphics\geometry_utils.h" />
+    <ClInclude Include="include\graphics\dpi_manager.h" />
+    
+    <!-- 系统模块头文件 -->
+    <ClInclude Include="include\system\language_manager.h" />
+    <ClInclude Include="include\system\logger.h" />
+    
+    <!-- 资源头文件 -->
+    <ClInclude Include="include\resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\TinyPin.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\app.ico" />
+    <None Include="resources\TinyPin.exe.manifest" />
+    <None Include="resources\bullseye.cur" />
+    <None Include="resources\placepin.cur" />
+    <None Include="resources\removepin.cur" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

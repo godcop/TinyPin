@@ -1,0 +1,280 @@
+#include "../include/resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+#include <winresrc.h>
+
+#ifndef IDC_STATIC
+#define IDC_STATIC (-1)
+#endif
+#undef APSTUDIO_READONLY_SYMBOLS
+
+// English (United States) resources
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(65001)
+#endif //_WIN32
+
+// Dialog
+IDD_ABOUT DIALOGEX 0, 0, 220, 90
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDI_APP,IDC_LOGO,4,4,20,20,SS_NOTIFY
+    LTEXT           "TinyPin v1.0.0 - Freeware\nCopyright © 2025 godcop",IDC_ABOUT_VERSION,32,4,122,28,NOT WS_GROUP
+    RTEXT           "Pins in use:",IDC_ABOUT_PINS_LABEL,32,40,52,13,SS_CENTERIMAGE,WS_EX_RIGHT
+    LTEXT           "0",IDC_STATUS,89,40,40,13,SS_CENTERIMAGE | NOT WS_GROUP
+    LTEXT           "Website:",IDC_ABOUT_WEBSITE_LABEL,4,70,33,12,NOT WS_GROUP
+    LTEXT           "...",IDC_WEB,43,70,104,12,NOT WS_GROUP
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDVERT,160,-4,1,84
+    PUSHBUTTON      "OK",IDOK,168,4,38,14,BS_CENTER,WS_EX_STATICEDGE
+    
+END
+
+IDD_EDIT_AUTOPIN_RULE DIALOGEX 0, 0, 220, 97
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit Rule"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Rule",IDC_RULE_GROUP,4,4,212,64
+    LTEXT           "&Description",IDC_RULE_DESC_LABEL,12,18,44,8
+    EDITTEXT        IDC_DESCR,60,16,128,12,ES_AUTOHSCROLL
+    LTEXT           "&Title",IDC_RULE_TITLE_LABEL,12,34,20,8
+    EDITTEXT        IDC_TITLE,60,32,128,12,ES_AUTOHSCROLL
+    LTEXT           "",IDC_TTLPICK,192,32,16,12,SS_NOTIFY | NOT WS_GROUP
+    LTEXT           "&Class",IDC_RULE_CLASS_LABEL,12,50,20,8
+    EDITTEXT        IDC_CLASS,60,48,128,12,ES_AUTOHSCROLL
+    LTEXT           "",IDC_CLSPICK,192,48,16,12,SS_NOTIFY | NOT WS_GROUP
+    DEFPUSHBUTTON   "OK",IDOK,52,76,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,108,76,50,14
+END
+
+IDD_OPT_PINS DIALOGEX 0, 0, 212, 156
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Pins"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "Pin Icon",IDC_PINS_ICON_GROUP,8,8,196,52
+    LTEXT           "Icon File",IDC_PINS_COLOR_LABEL,16,24,45,8
+    PUSHBUTTON      "&Change",IDC_PIN_ICON_CHANGE,68,20,64,14
+    PUSHBUTTON      "&Reset Default",IDC_PIN_ICON_RESET,136,20,64,14
+    LTEXT           "&Tracking Rate",IDC_PINS_TRACKING_LABEL,16,42,45,8
+    EDITTEXT        IDC_POLL_RATE,68,40,40,12,ES_NUMBER
+    CONTROL         "UpDown1",IDC_POLL_RATE_UD,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,96,40,11,11
+    LTEXT           "ms",IDC_PINS_MS_LABEL1,116,42,22,8,NOT WS_GROUP
+    GROUPBOX        "Tray Icon &Activation",IDC_PINS_ACTIVATION_GROUP,8,68,196,40,WS_GROUP
+    CONTROL         "Single click",IDC_TRAY_SINGLE_CLICK,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,16,82,70,8
+    CONTROL         "Double click",IDC_TRAY_DOUBLE_CLICK,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,16,95,70,8
+    GROUPBOX        "System",IDC_PINS_SYSTEM_GROUP,8,116,196,32,WS_GROUP
+    CONTROL         "Run on system startup",IDC_RUN_ON_STARTUP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,132,100,10
+END
+
+IDD_OPT_AUTOPIN DIALOGEX 0, 0, 212, 145
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Auto Pin"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "",IDC_AUTOPIN_GROUP,8,8,196,128
+    CONTROL         "E&nable",IDC_AUTOPIN_ON,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,8,38,10
+    CONTROL         "List1",IDC_LIST,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_NOSORTHEADER | WS_BORDER | WS_TABSTOP,20,24,112,84
+    PUSHBUTTON      "&Add",IDC_ADD,144,24,50,14
+    PUSHBUTTON      "&Remove",IDC_REMOVE,144,40,50,14
+    PUSHBUTTON      "&Edit",IDC_EDIT,144,56,50,14
+    PUSHBUTTON      "&Up",IDC_UP,144,76,50,14
+    PUSHBUTTON      "&Down",IDC_DOWN,144,92,50,14
+    LTEXT           "De&lay",IDC_AUTOPIN_DELAY_LABEL,20,118,25,8
+    EDITTEXT        IDC_RULE_DELAY,52,116,40,12,ES_NUMBER
+    CONTROL         "UpDown1",IDC_RULE_DELAY_UD,"msctls_updown32",UDS_SETBUDDYINT | UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | UDS_NOTHOUSANDS,80,116,11,11
+    LTEXT           "ms",IDC_AUTOPIN_MS_LABEL,96,118,22,8,NOT WS_GROUP
+END
+
+IDD_OPT_HOTKEYS DIALOGEX 0, 0, 212, 97
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Hotkeys"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "",IDC_HOTKEYS_GROUP,8,8,196,80
+    CONTROL         "&Enable",IDC_HOTKEYS_ON,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,16,8,38,10
+    LTEXT           "Enter pin &mode",IDC_HOTKEYS_PINMODE_LABEL,16,24,80,8,NOT WS_GROUP
+    CONTROL         "HotKey1",IDC_HOT_PINMODE,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,16,36,180,12
+    LTEXT           "&Toggle active window pin",IDC_HOTKEYS_TOGGLE_LABEL,16,56,100,8,NOT WS_GROUP
+    CONTROL         "HotKey2",IDC_HOT_TOGGLEPIN,"msctls_hotkey32",WS_BORDER | WS_TABSTOP,16,68,180,12
+END
+
+IDD_OPT_LANG DIALOGEX 0, 0, 212, 60
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Language"
+FONT 8, "MS Shell Dlg", 0, 0, 0x0
+BEGIN
+    GROUPBOX        "&Interface",IDC_LANG_INTERFACE_GROUP,8,8,196,40
+    COMBOBOX        IDC_UILANG,16,24,180,100,CBS_DROPDOWNLIST | CBS_OWNERDRAWFIXED | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
+// Menu
+IDM_TRAY MENU 
+CHARACTERISTICS 0x00000001
+BEGIN
+    POPUP "(tray)"
+    BEGIN
+        MENUITEM "&Enter pin mode",             CM_NEWPIN
+        MENUITEM "&Remove all pins",            CM_REMOVEPINS
+        MENUITEM SEPARATOR
+        MENUITEM "&Options",                 CM_OPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "&About",                      CM_ABOUT
+        MENUITEM SEPARATOR
+        MENUITEM "&Close TinyPin",             CM_CLOSE
+    END
+END
+
+// Version
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "Comments", "Freeware"
+            VALUE "CompanyName", "godcop"
+            VALUE "FileDescription", "TinyPin Application"
+            VALUE "FileVersion", "1.0.0"
+            VALUE "InternalName", "TinyPin.exe"
+            VALUE "LegalCopyright", "Copyright (C) 2025 godcop"
+            VALUE "OriginalFilename", "TinyPin.exe"
+            VALUE "ProductName", "godcop TinyPin"
+            VALUE "ProductVersion", "1.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+#ifdef APSTUDIO_INVOKED
+// TEXTINCLUDE
+1 TEXTINCLUDE 
+BEGIN
+    "../include/resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include <winresrc.h>\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+#endif    // APSTUDIO_INVOKED
+
+// Cursor
+IDC_PLACEPIN            CURSOR                  "placepin.cur"
+IDC_REMOVEPIN           CURSOR                  "removepin.cur"
+IDC_BULLSEYE            CURSOR                  "bullseye.cur"
+
+// Icon
+IDI_APP                 ICON                    "app.ico"
+
+#ifdef APSTUDIO_INVOKED
+// DESIGNINFO
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 213
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_EDIT_AUTOPIN_RULE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 213
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 90
+    END
+
+    IDD_OPT_PINS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 205
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 149
+    END
+
+    IDD_OPT_AUTOPIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 205
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 138
+    END
+
+    IDD_OPT_HOTKEYS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 205
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 90
+    END
+
+    IDD_OPT_LANG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 205
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 98
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+// String Table
+STRINGTABLE 
+BEGIN
+    IDS_ERRBOXTTITLE        "%1 Error"
+    IDS_WRNBOXTTITLE        "%1 Warning"
+    IDS_OPTIONSTITLE        "TinyPin Options"
+    IDS_WRN_UIRANGE         "%1 must be between %2!d! and %3!d!"
+    IDS_NEWRULEDESCR        "<new>"
+    IDS_LANG                "English v1.0.0"
+    IDS_ERR_HOTKEYSSET      "Could not set some hotkeys.\r\n\r\nPlease check if the hotkeys specified in the Options dialog are already used by another application."
+    IDS_ERR_DLGCREATE       "Could not create dialog"
+    IDS_ERR_MUTEXFAILCONFIRM "Could not check if TinyPin is already running.\r\n\r\nDo you want to start anyway?"
+    IDS_ERR_WNDCLSREG       "Could not register window class"
+    IDS_ERR_SETPINPARENTFAIL "Could not set pin parent window"
+    IDS_ERR_SETTOPMOSTFAIL  "This window does not support topmost"
+    IDS_ERR_COULDNOTFINDWND "Could not find window"
+    IDS_ERR_ALREADYTOPMOST  "Window is already topmost"
+    IDS_ERR_CANNOTPINDESKTOP "Cannot pin desktop"
+    IDS_ERR_CANNOTPINTASKBAR "Cannot pin taskbar"
+    IDS_ERR_PINWND          "Could not pin window"
+    IDS_ERR_PINCREATE       "Could not create pin"
+    IDS_ERR_ALREADYRUNNING  "TinyPin is already running"
+    IDS_ERR_CCINIT          "Could not load common controls"
+    IDS_ERR_HOOKDLL         "Could not load hook DLL.\r\n\r\nAuto pin functionality is disabled."
+    IDS_ERR_TRAYSETWND      "Could not set tray icon window"
+    IDS_ERR_TRAYCREATE      "Could not create tray icon"
+    IDS_TRAYTIP             "Pin"
+END
+
+#ifndef APSTUDIO_INVOKED
+// Generated from the TEXTINCLUDE 3 resource.
+
+#endif    // not APSTUDIO_INVOKED
+

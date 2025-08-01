@@ -1,0 +1,160 @@
+{
+  "language_info": {
+    "name": "English",
+    "code": "en_US",
+    "version": "1.0.0"
+  },
+  "dialogs": {
+    "about": {
+      "title": "About TinyPin",
+      "version": "TinyPin v1.0.0 - Freeware\nCopyright © 2025 by godcop",
+      "copyright": "Copyright",
+      "description": "A utility to pin any window on top",
+      "pins_used": "Pins in use:",
+      "email": "Email:",
+      "website": "Website:",
+      "ok": "OK"
+    },
+    "edit_rule": {
+      "title": "Edit Rule",
+      "rule_group": "Rule",
+      "description_label": "&Description",
+      "title_label": "&Title",
+      "class_label": "&Class",
+      "description": "&Description:",
+      "window_title": "&Title:",
+      "window_class": "&Class:",
+      "enabled": "Enabled",
+      "ok": "OK",
+      "cancel": "Cancel"
+    },
+    "pins": {
+      "title": "Pins",
+      "icon_group": "Pin Icon",
+      "tracking_label": "&Tracking Rate",
+      "ms_label": "ms",
+      "activation_group": "Tray Icon &Activation",
+      "system_group": "System",
+      "pin_icon": "Pin Icon",
+      "icon_file": "&Icon File",
+      "change": "&Change",
+      "reset_default": "Reset Default",
+      "tracking_rate": "&Tracking Rate",
+      "ms": "ms",
+      "tray_activation": "Tray Icon &Activation",
+      "single_click": "Single click",
+      "double_click": "Double click",
+      "system": "System",
+      "run_on_startup": "Run on system startup"
+    },
+    "autopin": {
+      "title": "Auto Pin",
+      "delay_label": "De&lay",
+      "ms_label": "ms",
+      "enable": "E&nable",
+      "delay": "De&lay",
+      "ms": "ms",
+      "rules": "Rules:",
+      "add": "&Add",
+      "edit": "&Edit",
+      "remove": "&Remove",
+      "move_up": "&Up",
+      "move_down": "&Down"
+    },
+    "hotkeys": {
+      "title": "Hotkeys",
+      "pinmode_label": "Enter pin &mode",
+      "toggle_label": "&Toggle active window pin",
+      "enable": "&Enable",
+      "enter_pin_mode": "Enter pin &mode",
+      "toggle_pin": "&Toggle active window pin"
+    },
+    "language": {
+      "title": "Language",
+      "interface_group": "&Interface",
+      "ui_language": "&Interface",
+      "auto_detect": "Auto Detect",
+      "restart_required": "Language changes will take full effect after restarting the program."
+    },
+    "options": {
+      "title": "TinyPin Options",
+      "ok": "OK",
+      "cancel": "Cancel",
+      "apply": "Apply"
+    }
+  },
+  "tray": {
+    "pin_mode": "&Enter Pin Mode",
+    "remove_all_pins": "&Remove All Pins",
+    "options": "&Options",
+    "about": "&About",
+    "exit": "&Close TinyPin"
+  },
+  "errors": {
+    "window_class_registration": "Failed to register window class",
+    "main_window_creation": "Failed to create main window",
+    "invalid_value": "Invalid value",
+    "out_of_range": "Value out of range"
+  },
+  "warnings": {
+    "resource_load_failed": "Failed to load resource",
+    "setting_save_failed": "Failed to save settings"
+  },
+  "tooltips": {
+    "pin_window": "Pin this window",
+    "unpin_window": "Unpin this window",
+    "enter_pin_mode": "Enter pin mode",
+    "drag_title_tooltip": "Drag icon to get window title",
+    "drag_class_tooltip": "Drag icon to get window class"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "yes": "Yes",
+    "no": "No",
+    "information": "Information",
+    "warning": "Warning",
+    "error": "Error",
+    "critical_error": "Critical Error",
+    "system_error": "System Error",
+    "unknown_system_error": "Unknown System Error",
+    "resource_string_load_error": "Error: Could not load resource string ID %u",
+    "restart_required": "Language changes will take full effect after restarting the program."
+  },
+  "strings": {
+    "error_title": "%1 Error",
+    "warning_title": "%1 Warning",
+    "options_title": "TinyPin Options",
+    "ui_range_warning": "%1 must be between %2!d! and %3!d!",
+    "new_rule_description": "<New>",
+    "language": "English v1.0.0",
+    "hotkeys_set_error": "Could not set some hotkeys.\r\n\r\nPlease check if the hotkeys specified in the options dialog are already in use by other applications.",
+    "dialog_create_error": "Could not create dialog",
+    "mutex_fail_confirm": "Could not check if TinyPin is already running.\r\n\r\nDo you still want to start?",
+    "window_class_register_error": "Could not register window class",
+    "set_pin_parent_fail": "Could not set pin parent window",
+    "set_topmost_fail": "This window does not support topmost",
+    "could_not_find_window": "Could not find window",
+    "already_topmost": "Window is already topmost",
+    "cannot_pin_desktop": "Cannot pin desktop",
+    "cannot_pin_taskbar": "Cannot pin taskbar",
+    "pin_window_error": "Could not pin window",
+    "pin_create_error": "Could not create pin",
+    "already_running": "TinyPin is already running",
+    "common_controls_init_error": "Could not load common controls",
+    "hook_dll_error": "Could not load hook DLL.\r\n\r\nAuto pin functionality has been disabled.",
+    "tray_set_window_error": "Could not set tray icon window",
+    "tray_create_error": "Could not create tray icon",
+    "tray_tip": "Pin",
+    "logging_init_failed": "Failed to initialize logging system",
+    "language_manager_init_failed": "Failed to initialize language manager",
+    "common_controls_init_failed": "Failed to initialize common controls library, exiting",
+    "json_file_open_failed": "Failed to open JSON file",
+    "build_info": "Build: Release",
+    "language_file_load_failed": "Could not load language file: %s\r\nReverting to English interface.",
+    "window_class_register_failed": "Failed to register window class, exiting",
+    "main_window_create_failed": "Failed to create main window, exiting",
+    "settings_save_failed": "Failed to save settings to INI file"
+  }
+}

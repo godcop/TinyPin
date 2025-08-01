@@ -1,0 +1,160 @@
+{
+  "language_info": {
+    "name": "Français",
+    "code": "fr_FR",
+    "version": "1.0.0"
+  },
+  "dialogs": {
+    "about": {
+      "title": "À propos de TinyPin",
+      "version": "TinyPin v1.0.0 - Gratuit\nCopyright © 2025 par godcop",
+      "copyright": "Copyright",
+      "description": "Un utilitaire pour épingler n'importe quelle fenêtre au premier plan",
+      "pins_used": "Épingles utilisées:",
+      "email": "Email:",
+      "website": "Site web:",
+      "ok": "OK"
+    },
+    "edit_rule": {
+      "title": "Modifier la règle",
+      "rule_group": "Règle",
+      "description_label": "&Description",
+      "title_label": "&Titre",
+      "class_label": "&Classe",
+      "description": "&Description:",
+      "window_title": "&Titre:",
+      "window_class": "&Classe:",
+      "enabled": "Activé",
+      "ok": "OK",
+      "cancel": "Annuler"
+    },
+    "pins": {
+      "title": "Épingles",
+      "icon_group": "Icône d'épingle",
+      "tracking_label": "&Taux de suivi",
+      "ms_label": "ms",
+      "activation_group": "&Activation de l'icône de la barre d'état",
+      "system_group": "Système",
+      "pin_icon": "Icône d'épingle",
+      "icon_file": "&Fichier d'icône",
+      "change": "&Changer",
+      "reset_default": "Réinitialiser par défaut",
+      "tracking_rate": "&Taux de suivi",
+      "ms": "ms",
+      "tray_activation": "&Activation de l'icône de la barre d'état",
+      "single_click": "Clic simple",
+      "double_click": "Double clic",
+      "system": "Système",
+      "run_on_startup": "Exécuter au démarrage du système"
+    },
+    "autopin": {
+      "title": "Épinglage automatique",
+      "delay_label": "Délai(&L)",
+      "ms_label": "ms",
+      "enable": "Activer(&E)",
+      "delay": "Délai(&L)",
+      "ms": "ms",
+      "rules": "Règles:",
+      "add": "&Ajouter",
+      "edit": "&Modifier",
+      "remove": "&Supprimer",
+      "move_up": "&Haut",
+      "move_down": "&Bas"
+    },
+    "hotkeys": {
+      "title": "Raccourcis clavier",
+      "pinmode_label": "Entrer en mode épingle(&M)",
+      "toggle_label": "Basculer l'épingle de la fenêtre active(&T)",
+      "enable": "Activer(&E)",
+      "enter_pin_mode": "Entrer en mode épingle(&M)",
+      "toggle_pin": "Basculer l'épingle de la fenêtre active(&T)"
+    },
+    "language": {
+      "title": "Langue",
+      "interface_group": "&Interface",
+      "ui_language": "&Interface",
+      "auto_detect": "Détection automatique",
+      "restart_required": "Les changements de langue prendront pleinement effet après le redémarrage du programme."
+    },
+    "options": {
+      "title": "Options TinyPin",
+      "ok": "OK",
+      "cancel": "Annuler",
+      "apply": "Appliquer"
+    }
+  },
+  "tray": {
+    "pin_mode": "&Entrer en mode épingle",
+    "remove_all_pins": "&Supprimer toutes les épingles",
+    "options": "&Options",
+    "about": "&À propos",
+    "exit": "&Fermer TinyPin"
+  },
+  "errors": {
+    "window_class_registration": "Échec de l'enregistrement de la classe de fenêtre",
+    "main_window_creation": "Échec de la création de la fenêtre principale",
+    "invalid_value": "Valeur invalide",
+    "out_of_range": "Valeur hors limites"
+  },
+  "warnings": {
+    "resource_load_failed": "Échec du chargement de la ressource",
+    "setting_save_failed": "Échec de la sauvegarde des paramètres"
+  },
+  "tooltips": {
+    "pin_window": "Épingler cette fenêtre",
+    "unpin_window": "Désépingler cette fenêtre",
+    "enter_pin_mode": "Entrer en mode épingle",
+    "drag_title_tooltip": "Glisser l'icône pour obtenir le titre de la fenêtre",
+    "drag_class_tooltip": "Glisser l'icône pour obtenir la classe de la fenêtre"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Annuler",
+    "apply": "Appliquer",
+    "yes": "Oui",
+    "no": "Non",
+    "information": "Information",
+    "warning": "Avertissement",
+    "error": "Erreur",
+    "critical_error": "Erreur critique",
+    "system_error": "Erreur système",
+    "unknown_system_error": "Erreur système inconnue",
+    "resource_string_load_error": "Erreur: Impossible de charger la chaîne de ressource ID %u",
+    "restart_required": "Les changements de langue prendront pleinement effet après le redémarrage du programme."
+  },
+  "strings": {
+    "error_title": "Erreur %1",
+    "warning_title": "Avertissement %1",
+    "options_title": "Options TinyPin",
+    "ui_range_warning": "%1 doit être entre %2!d! et %3!d!",
+    "new_rule_description": "<Nouveau>",
+    "language": "Français v1.0.0",
+    "hotkeys_set_error": "Impossible de définir certains raccourcis clavier.\r\n\r\nVeuillez vérifier si les raccourcis spécifiés dans la boîte de dialogue des options sont déjà utilisés par d'autres applications.",
+    "dialog_create_error": "Impossible de créer la boîte de dialogue",
+    "mutex_fail_confirm": "Impossible de vérifier si TinyPin est déjà en cours d'exécution.\r\n\r\nVoulez-vous quand même démarrer?",
+    "window_class_register_error": "Impossible d'enregistrer la classe de fenêtre",
+    "set_pin_parent_fail": "Impossible de définir la fenêtre parent de l'épingle",
+    "set_topmost_fail": "Cette fenêtre ne prend pas en charge le premier plan",
+    "could_not_find_window": "Impossible de trouver la fenêtre",
+    "already_topmost": "La fenêtre est déjà au premier plan",
+    "cannot_pin_desktop": "Impossible d'épingler le bureau",
+    "cannot_pin_taskbar": "Impossible d'épingler la barre des tâches",
+    "pin_window_error": "Impossible d'épingler la fenêtre",
+    "pin_create_error": "Impossible de créer l'épingle",
+    "already_running": "TinyPin est déjà en cours d'exécution",
+    "common_controls_init_error": "Impossible de charger les contrôles communs",
+    "hook_dll_error": "Impossible de charger la DLL de hook.\r\n\r\nLa fonctionnalité d'épinglage automatique a été désactivée.",
+    "tray_set_window_error": "Impossible de définir la fenêtre de l'icône de la barre d'état",
+    "tray_create_error": "Impossible de créer l'icône de la barre d'état",
+    "tray_tip": "Épingle",
+    "logging_init_failed": "Échec de l'initialisation du système de journalisation",
+    "language_manager_init_failed": "Échec de l'initialisation du gestionnaire de langue",
+    "common_controls_init_failed": "Échec de l'initialisation de la bibliothèque de contrôles communs, fermeture",
+    "json_file_open_failed": "Échec de l'ouverture du fichier JSON",
+    "build_info": "Build: Release",
+    "language_file_load_failed": "Impossible de charger le fichier de langue: %s\r\nRetour à l'interface anglaise.",
+    "window_class_register_failed": "Échec de l'enregistrement de la classe de fenêtre, fermeture",
+    "main_window_create_failed": "Échec de la création de la fenêtre principale, fermeture",
+    "settings_save_failed": "Échec de la sauvegarde des paramètres dans le fichier INI"
+  }
+}

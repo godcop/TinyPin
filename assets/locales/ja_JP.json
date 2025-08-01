@@ -1,0 +1,160 @@
+{
+  "language_info": {
+    "name": "日本語",
+    "code": "ja_JP",
+    "version": "1.0.0"
+  },
+  "dialogs": {
+    "about": {
+      "title": "TinyPinについて",
+      "version": "TinyPin v1.0.0 - フリーウェア\nCopyright © 2025 by godcop",
+      "copyright": "著作権",
+      "description": "任意のウィンドウを最前面に固定するユーティリティ",
+      "pins_used": "使用中のピン:",
+      "email": "メール:",
+      "website": "ウェブサイト:",
+      "ok": "OK"
+    },
+    "edit_rule": {
+      "title": "ルールの編集",
+      "rule_group": "ルール",
+      "description_label": "説明(&D)",
+      "title_label": "タイトル(&T)",
+      "class_label": "クラス(&C)",
+      "description": "説明(&D):",
+      "window_title": "タイトル(&T):",
+      "window_class": "クラス(&C):",
+      "enabled": "有効",
+      "ok": "OK",
+      "cancel": "キャンセル"
+    },
+    "pins": {
+      "title": "ピン",
+      "icon_group": "ピンアイコン",
+      "tracking_label": "&追跡レート",
+      "ms_label": "ms",
+      "activation_group": "&トレイアイコンの動作",
+      "system_group": "システム",
+      "pin_icon": "ピンアイコン",
+      "icon_file": "&アイコンファイル",
+      "change": "&変更",
+      "reset_default": "デフォルトにリセット",
+      "tracking_rate": "&追跡レート",
+      "ms": "ms",
+      "tray_activation": "&トレイアイコンの動作",
+      "single_click": "シングルクリック",
+      "double_click": "ダブルクリック",
+      "system": "システム",
+      "run_on_startup": "システム起動時に実行"
+    },
+    "autopin": {
+      "title": "自動ピン",
+      "delay_label": "遅延(&L)",
+      "ms_label": "ms",
+      "enable": "有効(&E)",
+      "delay": "遅延(&L)",
+      "ms": "ms",
+      "rules": "ルール:",
+      "add": "追加(&A)",
+      "edit": "編集(&E)",
+      "remove": "削除(&R)",
+      "move_up": "上へ(&U)",
+      "move_down": "下へ(&D)"
+    },
+    "hotkeys": {
+      "title": "ホットキー",
+      "pinmode_label": "ピンモードに入る(&M)",
+      "toggle_label": "アクティブウィンドウのピンを切り替え(&T)",
+      "enable": "有効(&E)",
+      "enter_pin_mode": "ピンモードに入る(&M)",
+      "toggle_pin": "アクティブウィンドウのピンを切り替え(&T)"
+    },
+    "language": {
+      "title": "言語",
+      "interface_group": "インターフェース(&I)",
+      "ui_language": "インターフェース(&I)",
+      "auto_detect": "自動検出",
+      "restart_required": "言語の変更は、プログラムを再起動した後に完全に反映されます。"
+    },
+    "options": {
+      "title": "TinyPin オプション",
+      "ok": "OK",
+      "cancel": "キャンセル",
+      "apply": "適用"
+    }
+  },
+  "tray": {
+    "pin_mode": "ピンモードに入る(&E)",
+    "remove_all_pins": "すべてのピンを削除(&R)",
+    "options": "オプション(&O)",
+    "about": "TinyPinについて(&A)",
+    "exit": "TinyPinを終了(&C)"
+  },
+  "errors": {
+    "window_class_registration": "ウィンドウクラスの登録に失敗しました",
+    "main_window_creation": "メインウィンドウの作成に失敗しました",
+    "invalid_value": "無効な値",
+    "out_of_range": "値が範囲外です"
+  },
+  "warnings": {
+    "resource_load_failed": "リソースの読み込みに失敗しました",
+    "setting_save_failed": "設定の保存に失敗しました"
+  },
+  "tooltips": {
+    "pin_window": "このウィンドウをピン留め",
+    "unpin_window": "このウィンドウのピン留めを解除",
+    "enter_pin_mode": "ピンモードに入る",
+    "drag_title_tooltip": "アイコンをドラッグしてウィンドウタイトルを取得",
+    "drag_class_tooltip": "アイコンをドラッグしてウィンドウクラスを取得"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "キャンセル",
+    "apply": "適用",
+    "yes": "はい",
+    "no": "いいえ",
+    "information": "情報",
+    "warning": "警告",
+    "error": "エラー",
+    "critical_error": "重大なエラー",
+    "system_error": "システムエラー",
+    "unknown_system_error": "不明なシステムエラー",
+    "resource_string_load_error": "エラー: リソース文字列 ID %u を読み込めませんでした",
+    "restart_required": "言語の変更はプログラムの再起動後に完全に有効になります。"
+  },
+  "strings": {
+    "error_title": "%1 エラー",
+    "warning_title": "%1 警告",
+    "options_title": "TinyPin オプション",
+    "ui_range_warning": "%1 は %2!d! から %3!d! の間である必要があります",
+    "new_rule_description": "<新規>",
+    "language": "日本語 v1.0.0",
+    "hotkeys_set_error": "一部のホットキーを設定できませんでした。\r\n\r\nオプションダイアログで指定されたホットキーが他のアプリケーションで既に使用されていないか確認してください。",
+    "dialog_create_error": "ダイアログを作成できませんでした",
+    "mutex_fail_confirm": "TinyPinが既に実行中かどうかを確認できませんでした。\r\n\r\nそれでも開始しますか？",
+    "window_class_register_error": "ウィンドウクラスを登録できませんでした",
+    "set_pin_parent_fail": "ピンの親ウィンドウを設定できませんでした",
+    "set_topmost_fail": "このウィンドウは最前面表示をサポートしていません",
+    "could_not_find_window": "ウィンドウが見つかりませんでした",
+    "already_topmost": "ウィンドウは既に最前面です",
+    "cannot_pin_desktop": "デスクトップは固定できません",
+    "cannot_pin_taskbar": "タスクバーは固定できません",
+    "pin_window_error": "ウィンドウを固定できませんでした",
+    "pin_create_error": "ピンを作成できませんでした",
+    "already_running": "TinyPinは既に実行中です",
+    "common_controls_init_error": "コモンコントロールを読み込めませんでした",
+    "hook_dll_error": "フックDLLを読み込めませんでした。\r\n\r\n自動ピン機能が無効になりました。",
+    "tray_set_window_error": "トレイアイコンウィンドウを設定できませんでした",
+    "tray_create_error": "トレイアイコンを作成できませんでした",
+    "tray_tip": "ピン",
+    "logging_init_failed": "ログシステムの初期化に失敗しました",
+    "language_manager_init_failed": "言語マネージャーの初期化に失敗しました",
+    "common_controls_init_failed": "コモンコントロールライブラリの初期化に失敗しました。終了します",
+    "json_file_open_failed": "JSONファイルを開けませんでした",
+    "build_info": "ビルド: リリース",
+    "language_file_load_failed": "言語ファイルを読み込めませんでした: %s\r\n英語インターフェースに戻します。",
+    "window_class_register_failed": "ウィンドウクラスの登録に失敗しました。終了します",
+    "main_window_create_failed": "メインウィンドウの作成に失敗しました。終了します",
+    "settings_save_failed": "INIファイルへの設定保存に失敗しました"
+  }
+}

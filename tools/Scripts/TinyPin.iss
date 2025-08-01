@@ -13,12 +13,13 @@
 ; 3. 输出路径：build\installer\TinyPin-1.0-{平台}-setup.exe
 ;
 ; 命令行参数机制：
-; - 通过 /D 参数指定平台标识和可执行文件路径
+; - 通过 /D 参数指定平台标识、可执行文件路径和版本号
 ; - p：平台标识（x64、Win32、arm64）
 ; - s：可执行文件的相对路径
-; - 安装包文件名会自动包含指定的平台标识
+; - v：版本号（如：1.0.1）
+; - 安装包文件名会自动包含指定的平台标识和版本号
 ; - 架构要求会根据指定的平台自动设置
-; - 如果未指定参数，会使用默认值（x64 平台）
+; - 如果未指定参数，会使用默认值（x64 平台，1.0.0 版本）
 ;
 ; 多平台支持详情：
 ; - x64 平台：生成 TinyPin-1.0-x64-setup.exe，只能在 64 位系统安装
@@ -44,10 +45,14 @@
 ; 文件编码：UTF-8 LF 无 BOM 格式
 
 ; ========== 平台自动识别定义 ==========
-#define MyAppName "TinyPin"
-#define MyAppVersion "1.0.0"
-#define MyAppPublisher "godcop"
-#define MyAppURL "https://github.com/godcop/TinyPin"
+#define AppName "TinyPin"
+; 版本号可通过命令行参数 /Dv 指定，如果未指定则使用默认值
+#ifndef v
+  #define v "1.0.0"
+#endif
+#define Version v
+#define Publisher "godcop"
+#define URL "https://github.com/godcop/TinyPin"
 
 ; ========== 命令行参数定义 ==========
 ; 通过命令行参数指定平台和可执行文件路径
@@ -55,40 +60,42 @@
 #ifndef p
   #define p "x64"
 #endif
+#define Platform p
 
 #ifndef s
   #define s "..\..\build\compile\Release\x64\TinyPin.exe"
 #endif
+#define SourceExe s
 
 ; 验证指定的可执行文件是否存在
-#if !FileExists(s)
-  #error "指定的可执行文件不存在: " + s + "，请先编译项目或检查路径"
+#if !FileExists(SourceExe)
+  #error "指定的可执行文件不存在: " + SourceExe + "，请先编译项目或检查路径"
 #endif
 
 [Setup]
 ; ========== 应用程序基本信息 ==========
 ; 应用程序名称，使用自动定义的变量
-AppName={#MyAppName}
+AppName={#AppName}
 ; 应用程序版本号，使用自动定义的变量
-AppVersion={#MyAppVersion}
+AppVersion={#Version}
 ; 应用程序完整版本名称，包含名称和版本号
-AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#AppName} {#Version}
 ; 发布者名称，使用自动定义的变量
-AppPublisher={#MyAppPublisher}
+AppPublisher={#Publisher}
 ; 发布者官方网站 URL，使用自动定义的变量
-AppPublisherURL={#MyAppURL}
+AppPublisherURL={#URL}
 ; 技术支持网站 URL，用户可通过此链接获取帮助
-AppSupportURL={#MyAppURL}/issues
+AppSupportURL={#URL}/issues
 ; 软件更新检查 URL，用于检查新版本
-AppUpdatesURL={#MyAppURL}/releases
+AppUpdatesURL={#URL}/releases
 ; 版权信息，显示在程序属性中
-AppCopyright=Copyright © 2025 {#MyAppPublisher}
+AppCopyright=Copyright © 2025 {#Publisher}
 
 ; ========== 安装目录和文件设置 ==========
 ; 默认安装目录，{autopf} 表示 Program Files 文件夹
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={autopf}\{#AppName}
 ; 开始菜单中的程序组名称
-DefaultGroupName={#MyAppName}
+DefaultGroupName={#AppName}
 ; 允许用户选择不创建开始菜单图标
 AllowNoIcons=yes
 
@@ -99,7 +106,7 @@ AllowNoIcons=yes
 #endif
 OutputDir={#o}
 ; 生成的安装包文件名（不含扩展名），平台自动识别
-OutputBaseFilename={#MyAppName}-{#MyAppVersion}-{#p}-setup
+OutputBaseFilename={#AppName}-{#Version}-{#Platform}-setup
 ; 安装包的图标文件路径
 SetupIconFile=..\..\resources\app.ico
 
@@ -114,17 +121,17 @@ SolidCompression=yes
 MinVersion=6.1sp1
 
 ; 根据检测到的平台自动设置架构要求
-#if p == "x64"
+#if Platform == "x64"
   ; 只允许在 64 位兼容系统上安装
   ArchitecturesAllowed=x64compatible
   ; 在 64 位系统上以 64 位模式安装
   ArchitecturesInstallIn64BitMode=x64compatible
-#elif p == "Win32"
+#elif Platform == "Win32"
   ; 允许在 32 位和 64 位系统上安装
   ArchitecturesAllowed=x86 x64compatible
   ; 在 64 位系统上以 32 位模式安装
   ArchitecturesInstallIn64BitMode=
-#elif p == "arm64"
+#elif Platform == "arm64"
   ; 只允许在 ARM64 系统上安装
   ArchitecturesAllowed=arm64
   ; 在 ARM64 系统上以 64 位模式安装
@@ -150,9 +157,9 @@ LicenseFile=..\..\LICENSE.txt
 
 ; ========== 卸载程序设置 ==========
 ; 卸载程序在控制面板中显示的图标
-UninstallDisplayIcon={app}\{#MyAppName}.exe
+UninstallDisplayIcon={app}\{#AppName}.exe
 ; 卸载程序在控制面板中显示的名称
-UninstallDisplayName={#MyAppName}
+UninstallDisplayName={#AppName}
 
 [Languages]
 ; ========== 安装程序支持的语言 ==========
@@ -171,7 +178,7 @@ Name: "startup"; Description: "开机自动启动 微钉"; GroupDescription: "�
 [Files]
 ; ========== 主程序文件 ==========
 ; 使用自动检测到的可执行文件路径
-Source: "{#s}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#SourceExe}"; DestDir: "{app}"; Flags: ignoreversion
 
 ; ========== 资源文件 ==========
 ; 许可证文件
@@ -188,34 +195,34 @@ Source: "..\..\assets\*"; DestDir: "{app}\assets"; Flags: ignoreversion recurses
 ; ========== 创建的快捷方式图标 ==========
 ; 开始菜单图标
 ; 在开始菜单程序组中创建应用快捷方式
-Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"
+Name: "{group}\{#AppName}"; Filename: "{app}\{#AppName}.exe"
 ; 在开始菜单程序组中创建卸载程序快捷方式
-Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
+Name: "{group}\{cm:UninstallProgram,{#AppName}}"; Filename: "{uninstallexe}"
 ; 桌面图标（可选）
 ; 在桌面创建快捷方式，仅当用户选择了桌面图标任务时
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppName}.exe"; Tasks: desktopicon
+Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppName}.exe"; Tasks: desktopicon
 
 [Registry]
 ; ========== 注册表项设置 ==========
 ; 应用程序安装路径
 ; 在当前用户注册表中记录安装路径，避免需要管理员权限，卸载时删除整个注册表键
-Root: HKCU; Subkey: "SOFTWARE\{#MyAppPublisher}\{#MyAppName}"; ValueType: string; ValueName: "Install_Dir"; ValueData: "{app}"; Flags: uninsdeletekey
+Root: HKCU; Subkey: "SOFTWARE\{#Publisher}\{#AppName}"; ValueType: string; ValueName: "Install_Dir"; ValueData: "{app}"; Flags: uninsdeletekey
 
 ; 开机自启动（可选）
 ; 在当前用户的启动项中添加应用，仅当用户选择了开机自启动任务时，卸载时删除此值
-Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "{#MyAppName}"; ValueData: "{app}\{#MyAppName}.exe"; Flags: uninsdeletevalue; Tasks: startup
+Root: HKCU; Subkey: "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"; ValueType: string; ValueName: "{#AppName}"; ValueData: "{app}\{#AppName}.exe"; Flags: uninsdeletevalue; Tasks: startup
 
 [Run]
 ; ========== 安装完成后执行的操作 ==========
 ; 安装完成后运行程序（可选）
 ; 安装完成后询问用户是否立即运行程序，不等待程序结束，静默安装时跳过
-Filename: "{app}\{#MyAppName}.exe"; Description: "{cm:LaunchProgram,{#MyAppName}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#AppName}.exe"; Description: "{cm:LaunchProgram,{#AppName}}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
 ; ========== 卸载时需要删除的文件和目录 ==========
 ; 清理用户配置文件
 ; 删除用户应用数据目录中的应用文件夹及其所有内容
-Type: filesandordirs; Name: "{userappdata}\{#MyAppName}"
+Type: filesandordirs; Name: "{userappdata}\{#AppName}"
 ; 清理应用资源目录
 ; 删除安装目录中的 assets 文件夹及其所有内容
 Type: filesandordirs; Name: "{app}\assets"

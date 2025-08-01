@@ -1,0 +1,176 @@
+name: 手动发布
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '发布版本号 (例如: 1.0.1)'
+        required: true
+        type: string
+      prerelease:
+        description: '是否为预发布版本'
+        required: false
+        type: boolean
+        default: false
+
+env:
+  BUILD_CONFIGURATION: Release
+  PROJECT_NAME: TinyPin
+
+jobs:
+  manual-release:
+    runs-on: windows-latest
+    
+    steps:
+    - name: 检出代码
+      uses: actions/checkout@v4
+
+    - name: 设置MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: 验证版本格式
+      shell: pwsh
+      run: |
+        $version = "${{ github.event.inputs.version }}"
+        if ($version -notmatch '^\d+\.\d+\.\d+$') {
+          Write-Error "版本号格式错误，应为 x.y.z 格式，例如: 1.0.1"
+          exit 1
+        }
+        echo "✓ 版本号格式正确: $version"
+
+    - name: 创建构建目录
+      run: |
+        mkdir -p build/compile/Release/x64
+        mkdir -p build/compile/Release/Win32
+        mkdir -p build/compile/Release/ARM64
+        mkdir -p build/installer
+
+    - name: 构建所有平台
+      shell: pwsh
+      run: |
+        $platforms = @("x64", "Win32", "ARM64")
+        
+        foreach ($platform in $platforms) {
+          Write-Host "🔨 构建 $platform 版本..."
+          msbuild TinyPin.sln /p:Configuration=${{ env.BUILD_CONFIGURATION }} /p:Platform=$platform /p:OutDir="build\compile\Release\$platform\" /nologo /verbosity:minimal
+          
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "$platform 版本构建失败"
+            exit 1
+          }
+          
+          $exePath = "build\compile\Release\$platform\TinyPin.exe"
+          if (Test-Path $exePath) {
+            $size = (Get-Item $exePath).Length
+            Write-Host "✓ $platform 版本构建成功 (大小: $([math]::Round($size/1MB, 2)) MB)"
+          } else {
+            Write-Error "$platform 版本可执行文件未找到"
+            exit 1
+          }
+        }
+
+    - name: 创建所有安装包
+      shell: pwsh
+      run: |
+        $version = "${{ github.event.inputs.version }}"
+        $platforms = @("x64", "Win32", "arm64")
+        $isccPath = "tools\InnoSetup6\ISCC.exe"
+        $scriptPath = "tools\Scripts\TinyPin.iss"
+        $outputDir = "build\installer"
+        
+        foreach ($platform in $platforms) {
+          Write-Host "📦 创建 $platform 安装包..."
+          $sourcePath = "build\compile\Release\$platform\TinyPin.exe"
+          
+          & $isccPath $scriptPath /Dp=$platform /Ds=$sourcePath /Do=$outputDir /Dv=$version
+          
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "$platform 安装包创建失败"
+            exit 1
+          }
+          
+          $installerPath = "$outputDir\TinyPin-$version-$platform-setup.exe"
+          if (Test-Path $installerPath) {
+            $size = (Get-Item $installerPath).Length
+            Write-Host "✓ $platform 安装包创建成功 (大小: $([math]::Round($size/1MB, 2)) MB)"
+          } else {
+            Write-Error "$platform 安装包文件未找到"
+            exit 1
+          }
+        }
+
+    - name: 创建发布说明
+      id: release_notes
+      shell: pwsh
+      run: |
+        $version = "${{ github.event.inputs.version }}"
+        $date = Get-Date -Format "yyyy年MM月dd日"
+        $prerelease = "${{ github.event.inputs.prerelease }}" -eq "true"
+        $prereleaseText = if ($prerelease) { " (预发布版本)" } else { "" }
+        
+        $releaseNotes = @"
+        ## TinyPin $version$prereleaseText
+
+        **发布日期**: $date
+
+        ### 📦 安装包下载
+
+        - **TinyPin-$version-x64-setup.exe** - 适用于 64 位 Windows 系统
+        - **TinyPin-$version-Win32-setup.exe** - 适用于 32 位和 64 位 Windows 系统
+        - **TinyPin-$version-arm64-setup.exe** - 适用于 ARM64 Windows 系统
+
+        ### 🔧 系统要求
+
+        - Windows 7 SP1 或更高版本
+        - 对应的系统架构 (x64/x86/ARM64)
+
+        ### 📝 更新内容
+
+        此版本通过手动发布流程创建，包含最新的功能改进和错误修复。
+
+        ### 🚀 安装说明
+
+        1. 下载适合您系统架构的安装包
+        2. 运行安装程序并按照提示完成安装
+        3. 安装完成后可在开始菜单找到 TinyPin
+
+        ---
+        
+        **项目主页**: https://github.com/${{ github.repository }}
+        "@
+        
+        $releaseNotes | Out-File -FilePath "release_notes.md" -Encoding UTF8
+        echo "notes_file=release_notes.md" >> $env:GITHUB_OUTPUT
+
+    - name: 创建 GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.event.inputs.version }}
+        name: TinyPin ${{ github.event.inputs.version }}
+        body_path: ${{ steps.release_notes.outputs.notes_file }}
+        draft: false
+        prerelease: ${{ github.event.inputs.prerelease }}
+        files: |
+          build/installer/TinyPin-${{ github.event.inputs.version }}-x64-setup.exe
+          build/installer/TinyPin-${{ github.event.inputs.version }}-Win32-setup.exe
+          build/installer/TinyPin-${{ github.event.inputs.version }}-arm64-setup.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 发布完成通知
+      shell: pwsh
+      run: |
+        $version = "${{ github.event.inputs.version }}"
+        $prerelease = "${{ github.event.inputs.prerelease }}" -eq "true"
+        $prereleaseText = if ($prerelease) { " (预发布版本)" } else { "" }
+        
+        Write-Host "🎉 TinyPin $version$prereleaseText 手动发布完成！"
+        Write-Host ""
+        Write-Host "📦 生成的安装包："
+        Get-ChildItem "build\installer\*.exe" | ForEach-Object {
+          $size = [math]::Round($_.Length/1MB, 2)
+          Write-Host "  - $($_.Name) ($size MB)"
+        }
+        Write-Host ""
+        Write-Host "🚀 已发布到 GitHub Releases: v$version"
+        Write-Host "🔗 发布页面: https://github.com/${{ github.repository }}/releases/tag/v$version"

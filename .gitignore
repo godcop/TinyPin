@@ -14,32 +14,6 @@ local.properties
 
 # 构建输出目录
 build/
-Debug/
-Release/
-x64/
-Win32/
-arm64/
-
-# 编译生成的文件
-*.obj
-*.pch
-*.pdb
-*.idb
-*.res
-*.tlog
-*.log
-*.ilk
-*.exp
-*.lib
-*.exe
-*.dll
-
-# 临时文件
-*.tmp
-*.temp
-*~
-*.bak
-*.swp
 
 # 临时上传目录
 temp/
@@ -47,7 +21,9 @@ doc_temp/
 
 # 日志文件
 log/
-*.log
 test/
+
+# GitHub Actions 相关
+release_notes.md
 
 .trae/

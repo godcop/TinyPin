@@ -161,22 +161,79 @@ jobs:
               exit 1
             }
             
-            # 使用相对于脚本文件的路径
-            & $isccPath $scriptPath /Dp=$platform /Ds=$relativeSourcePath /Do=$outputDir /Dv=$version
+            # 使用相对于脚本文件的路径，输出到脚本目录下的 build\installer
+            $scriptOutputDir = "build\installer"
+            & $isccPath $scriptPath /Dp=$platform /Ds=$relativeSourcePath /Do=$scriptOutputDir /Dv=$version
             
             if ($LASTEXITCODE -ne 0) {
               Write-Error "$platform 安装包创建失败"
               exit 1
             }
             
-            $installerPath = "$outputDir\TinyPin-$version-$platform-setup.exe"
-            if (Test-Path $installerPath) {
-              $size = (Get-Item $installerPath).Length
-              Write-Host "✓ $platform 安装包创建成功 (大小: $([math]::Round($size/1MB, 2)) MB)"
+            # 检查 Inno Setup 实际输出的安装包路径（在脚本目录下）
+            $scriptInstallerPath = "tools\Scripts\$scriptOutputDir\TinyPin-$version-$platform-setup.exe"
+            $finalInstallerPath = "$outputDir\TinyPin-$version-$platform-setup.exe"
+            
+            Write-Host "🔍 安装包路径检查:"
+            Write-Host "  - 脚本输出路径: $scriptInstallerPath"
+            Write-Host "  - 脚本输出存在: $(Test-Path $scriptInstallerPath)"
+            Write-Host "  - 最终目标路径: $finalInstallerPath"
+            
+            if (Test-Path $scriptInstallerPath) {
+              # 确保目标目录存在
+              $targetDir = Split-Path $finalInstallerPath -Parent
+              if (!(Test-Path $targetDir)) {
+                New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+              }
+              
+              # 移动安装包到最终位置
+              Move-Item -Path $scriptInstallerPath -Destination $finalInstallerPath -Force
+              
+              if (Test-Path $finalInstallerPath) {
+                $size = (Get-Item $finalInstallerPath).Length
+                Write-Host "✓ $platform 安装包创建成功 (大小: $([math]::Round($size/1MB, 2)) MB)"
+                Write-Host "  - 最终路径: $finalInstallerPath"
+              } else {
+                Write-Error "$platform 安装包移动失败"
+                exit 1
+              }
             } else {
-              Write-Error "$platform 安装包文件未找到"
+              Write-Error "$platform 安装包文件未找到: $scriptInstallerPath"
               exit 1
             }
+          }
+
+      - name: 输出安装包创建后的目录结构
+        shell: pwsh
+        run: |
+          Write-Host "📦 安装包创建完成后的目录结构:"
+          Write-Host ""
+          Write-Host "📁 项目根目录 build\installer:"
+          if (Test-Path "build\installer") {
+            Get-ChildItem "build\installer" | ForEach-Object {
+              if ($_.PSIsContainer) {
+                Write-Host "  📂 $($_.Name)"
+              } else {
+                $size = [math]::Round($_.Length/1MB, 2)
+                Write-Host "  📄 $($_.Name) ($size MB)"
+              }
+            }
+          } else {
+            Write-Host "  ❌ build\installer 目录不存在"
+          }
+          Write-Host ""
+          Write-Host "📁 脚本目录 tools\Scripts\build\installer:"
+          if (Test-Path "tools\Scripts\build\installer") {
+            Get-ChildItem "tools\Scripts\build\installer" | ForEach-Object {
+              if ($_.PSIsContainer) {
+                Write-Host "  📂 $($_.Name)"
+              } else {
+                $size = [math]::Round($_.Length/1MB, 2)
+                Write-Host "  📄 $($_.Name) ($size MB)"
+              }
+            }
+          } else {
+            Write-Host "  ❌ tools\Scripts\build\installer 目录不存在"
           }
 
       - name: 创建发布说明

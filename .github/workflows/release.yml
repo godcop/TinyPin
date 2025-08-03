@@ -2,334 +2,235 @@ name: 自动构建和发布
 
 on:
   push:
-    branches: [ release ]
-  pull_request:
-    branches: [ release ]
+    tags:
+      - "v*"
 
-# 添加必要的权限设置
 permissions:
-  contents: write  # 允许创建 Release 和上传文件
-  actions: read    # 允许读取 Actions 状态
-  checks: read     # 允许读取检查状态
+  contents: write
+  actions: read
+  checks: read
 
 env:
-  # 构建配置
   BUILD_CONFIGURATION: Release
-  # 项目名称
   PROJECT_NAME: TinyPin
 
 jobs:
   build-and-release:
     runs-on: windows-latest
-    
+
     steps:
-    - name: 检出代码
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: 设置MSBuild
-      uses: microsoft/setup-msbuild@v2
+      - name: 设置MSBuild
+        uses: microsoft/setup-msbuild@v2
 
-    - name: 获取版本信息
-      id: version
-      shell: pwsh
-      run: |
-        # 从git标签获取版本，如果没有标签则使用日期
-        $tag = git describe --tags --abbrev=0 2>$null
-        if ($tag) {
-          $version = $tag -replace '^v', ''
-        } else {
-          $version = "1.0.$(Get-Date -Format 'yyyyMMdd')"
-        }
-        echo "version=$version" >> $env:GITHUB_OUTPUT
-        echo "tag=v$version" >> $env:GITHUB_OUTPUT
-        echo "构建版本: $version"
-
-    - name: 创建构建目录
-      run: |
-        mkdir -p build/compile/Release/x64
-        mkdir -p build/compile/Release/Win32
-        mkdir -p build/compile/Release/ARM64
-        mkdir -p build/installer
-
-    - name: 构建所有平台
-      shell: pwsh
-      run: |
-        $platforms = @("x64", "Win32", "ARM64")
-
-        foreach ($platform in $platforms) {
-          Write-Host "🔨 构建 $platform 版本..."
-          msbuild TinyPin.sln /p:Configuration=${{ env.BUILD_CONFIGURATION }} /p:Platform=$platform /p:OutDir="build\compile\Release\$platform\" /nologo /verbosity:minimal
-          
-          if ($LASTEXITCODE -ne 0) {
-            Write-Error "$platform 版本构建失败"
-            exit 1
-          }
-          
-          $exePath = "build\compile\Release\$platform\TinyPin.exe"
-          if (Test-Path $exePath) {
-            $size = (Get-Item $exePath).Length
-            Write-Host "✓ $platform 版本构建成功 (大小: $([math]::Round($size/1MB, 2)) MB)"
+      - name: 获取版本信息
+        id: version
+        shell: pwsh
+        run: |
+          $tag = git describe --tags --abbrev=0 2>$null
+          if ($tag) {
+            $version = $tag -replace '^v', ''
           } else {
-            Write-Error "$platform 版本可执行文件未找到"
-            exit 1
+            $version = "1.0.$(Get-Date -Format 'yyyyMMdd')"
           }
-        }
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+          echo "tag=v$version" >> $env:GITHUB_OUTPUT
 
-    - name: 创建所有安装包
-      shell: pwsh
-      run: |
-        $version = "${{ steps.version.outputs.version }}"
-        $platforms = @("x64", "Win32", "arm64")
-        $isccPath = "tools\InnoSetup6\ISCC.exe"
-        $scriptPath = "tools\Scripts\TinyPin.iss"
-        $outputDir = "build\installer"
+      - name: 创建构建目录
+        run: |
+          mkdir -p build/compile/Release/x64
+          mkdir -p build/compile/Release/Win32
+          mkdir -p build/compile/Release/ARM64
+          mkdir -p build/installer
 
-        foreach ($platform in $platforms) {
-          Write-Host "📦 创建 $platform 安装包..."
-          $sourcePath = "build\compile\Release\$platform\TinyPin.exe"
-          # 转换为相对于脚本文件的路径（脚本在 tools\Scripts\ 目录下）
-          $relativeSourcePath = "..\..\build\compile\Release\$platform\TinyPin.exe"
-          
-          if (!(Test-Path $sourcePath)) {
-            Write-Error "源文件不存在: $sourcePath"
-            exit 1
-          }
-          
-          # 使用相对于脚本文件的路径，输出到脚本目录下的 build\installer
-          $scriptOutputDir = "build\installer"
-          
-          Write-Host "🔧 执行 Inno Setup 编译:"
-          Write-Host "  - 命令: $isccPath $scriptPath /Dp=$platform /Ds=$relativeSourcePath /Do=$scriptOutputDir /Dv=$version"
-          
-          & $isccPath $scriptPath /Dp=$platform /Ds=$relativeSourcePath /Do=$scriptOutputDir /Dv=$version
-          
-          if ($LASTEXITCODE -ne 0) {
-            Write-Error "$platform 安装包创建失败"
-            exit 1
-          }
-          
-          # 检查 Inno Setup 实际输出的安装包路径（在脚本目录下）
-          # 注意：如果版本号未正确传递，Inno Setup 可能使用默认版本号 1.0.0
-          $possibleVersions = @($version, "1.0.0")
-          $scriptInstallerPath = $null
-          $actualVersion = $null
-          
-          foreach ($testVersion in $possibleVersions) {
-            $testPath = "tools\Scripts\$scriptOutputDir\TinyPin-$testVersion-$platform-setup.exe"
-            if (Test-Path $testPath) {
-              $scriptInstallerPath = $testPath
-              $actualVersion = $testVersion
-              break
+      - name: 构建所有平台
+        shell: pwsh
+        run: |
+          $platforms = @("x64", "Win32", "ARM64")
+          foreach ($platform in $platforms) {
+            msbuild TinyPin.sln /p:Configuration=${{ env.BUILD_CONFIGURATION }} /p:Platform=$platform /p:OutDir="build\compile\Release\$platform\" /nologo /verbosity:minimal
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error "$platform 版本构建失败"
+              exit 1
+            }
+            if (!(Test-Path "build\compile\Release\$platform\TinyPin.exe")) {
+              Write-Error "$platform 版本可执行文件未找到"
+              exit 1
             }
           }
-          
-          $finalInstallerPath = "$outputDir\TinyPin-$version-$platform-setup.exe"
-          
-          if ($scriptInstallerPath -and (Test-Path $scriptInstallerPath)) {
-            # 确保目标目录存在
-            $targetDir = Split-Path $finalInstallerPath -Parent
-            if (!(Test-Path $targetDir)) {
-              New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+
+      - name: 创建安装包
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $platforms = @("x64", "Win32", "arm64")
+          $isccPath = "tools\InnoSetup6\ISCC.exe"
+          $scriptPath = "tools\Scripts\TinyPin.iss"
+          $outputDir = "build\installer"
+
+          foreach ($platform in $platforms) {
+            $sourcePath = "build\compile\Release\$platform\TinyPin.exe"
+            $relativeSourcePath = "..\..\build\compile\Release\$platform\TinyPin.exe"
+            
+            if (!(Test-Path $sourcePath)) {
+              Write-Error "源文件不存在: $sourcePath"
+              exit 1
+            }
+            
+            $scriptOutputDir = "build\installer"
+            & $isccPath $scriptPath /Dp=$platform /Ds=$relativeSourcePath /Do=$scriptOutputDir /Dv=$version
+            
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error "$platform 安装包创建失败"
+              exit 1
             }
             
             # 移动安装包到最终位置
-            Write-Host "📦 移动安装包: $scriptInstallerPath -> $finalInstallerPath"
-            Move-Item -Path $scriptInstallerPath -Destination $finalInstallerPath -Force
+            $possibleVersions = @($version, "1.0.0")
+            $scriptInstallerPath = $null
             
-            if (Test-Path $finalInstallerPath) {
-              $size = (Get-Item $finalInstallerPath).Length
-              Write-Host "✓ $platform 安装包创建成功 (大小: $([math]::Round($size/1MB, 2)) MB)"
-              if ($actualVersion -ne $version) {
-                Write-Host "  ⚠️ 注意: 实际版本号 ($actualVersion) 与期望版本号 ($version) 不匹配"
+            foreach ($testVersion in $possibleVersions) {
+              $testPath = "tools\Scripts\$scriptOutputDir\TinyPin-$testVersion-$platform-setup.exe"
+              if (Test-Path $testPath) {
+                $scriptInstallerPath = $testPath
+                break
+              }
+            }
+            
+            $finalInstallerPath = "$outputDir\TinyPin-$version-$platform-setup.exe"
+            
+            if ($scriptInstallerPath -and (Test-Path $scriptInstallerPath)) {
+              $targetDir = Split-Path $finalInstallerPath -Parent
+              if (!(Test-Path $targetDir)) {
+                New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+              }
+              Move-Item -Path $scriptInstallerPath -Destination $finalInstallerPath -Force
+              
+              if (!(Test-Path $finalInstallerPath)) {
+                Write-Error "$platform 安装包移动失败"
+                exit 1
               }
             } else {
-              Write-Error "$platform 安装包移动失败"
+              Write-Error "$platform 安装包文件未找到"
               exit 1
             }
+          }
+
+      - name: 创建发布说明
+        id: release_notes
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $date = Get-Date -Format "yyyy年MM月dd日"
+          $tagName = "v$version"
+
+          # 定义要包含的提交前缀
+          $allowedPrefixes = @("fix:", "feat:", "docs:", "style:", "refactor:", "perf:", "test:", "chore:")
+
+          # 获取提交记录
+          $previousTag = git describe --tags --abbrev=0 --match "v*" HEAD^ 2>$null
+          if ($previousTag) {
+            $commitList = git log --pretty=format:"%s" "$previousTag..HEAD" 2>$null
           } else {
-            Write-Error "$platform 安装包文件未找到"
-            # 列出脚本输出目录的所有文件用于调试
-            $scriptOutputFullPath = "tools\Scripts\$scriptOutputDir"
-            if (Test-Path $scriptOutputFullPath) {
-              Write-Host "脚本输出目录内容:"
-              Get-ChildItem $scriptOutputFullPath | ForEach-Object {
-                Write-Host "  📄 $($_.Name)"
+            $commitList = git log --pretty=format:"%s" 2>$null
+          }
+
+          if ($commitList) {
+            # 过滤只包含指定前缀的提交
+            $filteredCommits = $commitList | Where-Object {
+              $commit = $_
+              $allowedPrefixes | ForEach-Object {
+                if ($commit -match "^$_") {
+                  return $true
+                }
               }
+              return $false
             }
+            
+            if ($filteredCommits) {
+              $commits = ($filteredCommits | ForEach-Object { "- $_" }) -join "`n"
+            } else {
+              $commits = "- 无更新说明"
+            }
+          } else {
+            $commits = "- 无更新说明"
+          }
+
+          $releaseNotes = @"
+          ## TinyPin $version 发布
+          
+          **发布日期**: $date
+          **标签**: $tagName
+          
+          ### 📦 安装包下载
+          
+          - **TinyPin-$version-x64-setup.exe** - 适用于 64 位 Windows 系统
+          - **TinyPin-$version-Win32-setup.exe** - 适用于 32 位和 64 位 Windows 系统
+          - **TinyPin-$version-arm64-setup.exe** - 适用于 ARM64 Windows 系统
+          
+          ### 🔧 系统要求
+          
+          - Windows 7 SP1 或更高版本
+          - 对应的系统架构 (x64/x86/ARM64)
+          
+          ### 📝 更新内容
+          
+          $commits
+          
+          ### 🚀 安装说明
+          
+          1. 下载适合您系统架构的安装包
+          2. 运行安装程序并按照提示完成安装
+          3. 安装完成后可在开始菜单找到 TinyPin
+          "@
+
+          $releaseNotes | Out-File -FilePath "release_notes.md" -Encoding UTF8
+          echo "notes_file=release_notes.md" >> $env:GITHUB_OUTPUT
+
+      - name: 验证安装包
+        shell: pwsh
+        run: |
+          $version = "${{ steps.version.outputs.version }}"
+          $platforms = @("x64", "Win32", "arm64")
+          $allFilesExist = $true
+
+          foreach ($platform in $platforms) {
+            $installerPath = "build\installer\TinyPin-$version-$platform-setup.exe"
+            if (!(Test-Path $installerPath)) {
+              Write-Error "$platform 安装包不存在: $installerPath"
+              $allFilesExist = $false
+            }
+          }
+
+          if (-not $allFilesExist) {
+            Write-Error "部分安装包文件不存在，无法创建 Release"
             exit 1
           }
-        }
 
-    - name: 创建发布说明
-      id: release_notes
-      shell: pwsh
-      run: |
-        $version = "${{ steps.version.outputs.version }}"
-        $date = Get-Date -Format "yyyy年MM月dd日"
-        
-        $releaseNotes = @"
-        ## TinyPin $version 发布
+      - name: 创建 GitHub Release
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: TinyPin v${{ steps.version.outputs.version }}
+          body_path: release_notes.md
+          files: |
+            build/installer/*.exe
+          draft: false
+          prerelease: false
+          fail_on_unmatched_files: true
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        **发布日期**: $date
-
-        ### 📦 安装包下载
-
-        - **TinyPin-$version-x64-setup.exe** - 适用于 64 位 Windows 系统
-        - **TinyPin-$version-Win32-setup.exe** - 适用于 32 位和 64 位 Windows 系统
-        - **TinyPin-$version-arm64-setup.exe** - 适用于 ARM64 Windows 系统
-
-        ### 🔧 系统要求
-
-        - Windows 7 SP1 或更高版本
-        - 对应的系统架构 (x64/x86/ARM64)
-
-        ### 📝 更新内容
-
-        此版本包含最新的功能改进和错误修复。
-
-        ### 🚀 安装说明
-
-        1. 下载适合您系统架构的安装包
-        2. 运行安装程序并按照提示完成安装
-        3. 安装完成后可在开始菜单找到 TinyPin
-
-        ---
-        
-        **完整更改日志**: https://github.com/${{ github.repository }}/compare/v$version...release
-        "@
-        
-        # 将发布说明保存到文件
-        $releaseNotes | Out-File -FilePath "release_notes.md" -Encoding UTF8
-        echo "notes_file=release_notes.md" >> $env:GITHUB_OUTPUT
-
-    - name: 检查 GitHub Release 前置条件
-      if: github.event_name == 'push' && github.ref == 'refs/heads/release'
-      shell: pwsh
-      run: |
-        $version = "${{ steps.version.outputs.version }}"
-        $tagName = "v$version"
-        
-        Write-Host "🔍 检查 GitHub Release 前置条件..."
-        Write-Host "  - 版本号: $version"
-        Write-Host "  - 标签名: $tagName"
-        Write-Host "  - 仓库: ${{ github.repository }}"
-        Write-Host "  - 预发布: false"
-        
-        # 检查所有平台的安装包是否存在
-        $platforms = @("x64", "Win32", "arm64")
-        $allFilesExist = $true
-        
-        foreach ($platform in $platforms) {
-          $installerPath = "build\installer\TinyPin-$version-$platform-setup.exe"
-          if (Test-Path $installerPath) {
-            $size = (Get-Item $installerPath).Length
-            Write-Host "  ✓ $platform 安装包存在 (大小: $([math]::Round($size/1MB, 2)) MB)"
-          } else {
-            Write-Host "  ✗ $platform 安装包不存在: $installerPath"
-            $allFilesExist = $false
-          }
-        }
-        
-        if (-not $allFilesExist) {
-          Write-Error "部分安装包文件不存在，无法创建 Release"
-          exit 1
-        }
-        
-        # 检查标签是否已存在
-        try {
-          $existingTags = git tag -l $tagName
-          if ($existingTags) {
-            Write-Host "⚠️ 标签 $tagName 已存在"
-            Write-Host "现有标签列表:"
-            git tag -l | ForEach-Object { Write-Host "  - $_" }
-            Write-Host ""
-            Write-Host "解决方案:"
-            Write-Host "  1. 使用不同的版本号"
-            Write-Host "  2. 删除现有标签: git tag -d $tagName && git push origin :refs/tags/$tagName"
-            Write-Host "  3. 设置 draft: true 创建草稿 Release"
-            Write-Error "标签已存在，停止创建 Release"
-            exit 1
-          } else {
-            Write-Host "✓ 标签 $tagName 不存在，可以创建"
-          }
-        } catch {
-          Write-Host "⚠️ 无法检查标签状态: $($_.Exception.Message)"
-        }
-        
-        Write-Host "✅ 所有前置条件检查通过"
-
-    - name: 创建 GitHub Release
-      if: github.event_name == 'push' && github.ref == 'refs/heads/release'
-      id: create_release
-      uses: softprops/action-gh-release@v1
-      with:
-        tag_name: v${{ steps.version.outputs.version }}
-        name: TinyPin v${{ steps.version.outputs.version }}
-        body_path: release_notes.md
-        files: |
-          build/installer/*.exe
-        draft: false
-        prerelease: false
-        fail_on_unmatched_files: true
-        generate_release_notes: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: GitHub Release 创建结果
-      if: always() && (github.event_name == 'push' && github.ref == 'refs/heads/release')
-      shell: pwsh
-      run: |
-        if ("${{ steps.create_release.outcome }}" -eq "success") {
-          Write-Host "🎉 GitHub Release 创建成功!"
-          Write-Host "  - Release URL: ${{ steps.create_release.outputs.url }}"
-          Write-Host "  - 上传的文件:"
-          Get-ChildItem "build\installer\*.exe" | ForEach-Object {
-            $size = [math]::Round($_.Length/1MB, 2)
-            Write-Host "    📦 $($_.Name) ($size MB)"
-          }
-        } else {
-          Write-Host "❌ GitHub Release 创建失败"
-          Write-Host "可能的原因:"
-          Write-Host "  1. 权限问题 - 检查 GITHUB_TOKEN 权限"
-          Write-Host "  2. 标签已存在 - 使用不同版本号或删除现有标签"
-          Write-Host "  3. 文件不存在 - 检查安装包是否正确创建"
-          Write-Host "  4. 网络问题 - 重试发布流程"
-          Write-Host ""
-          Write-Host "调试信息:"
-          Write-Host "  - 版本: ${{ steps.version.outputs.version }}"
-          Write-Host "  - 标签: v${{ steps.version.outputs.version }}"
-          Write-Host "  - 仓库: ${{ github.repository }}"
-          Write-Host "  - 分支: ${{ github.ref }}"
-          Write-Host ""
-          Write-Host "如果是权限问题，请确保:"
-          Write-Host "  1. 仓库设置 > Actions > General > Workflow permissions 设置为 'Read and write permissions'"
-          Write-Host "  2. 或者在仓库设置中创建具有 'contents:write' 权限的 Personal Access Token"
-        }
-
-    - name: 上传构建产物
-      uses: actions/upload-artifact@v4
-      with:
-        name: TinyPin-${{ steps.version.outputs.version }}-Installers
-        path: |
-          build/installer/*.exe
-        retention-days: 30
-
-    - name: 构建完成通知
-      shell: pwsh
-      run: |
-        $version = "${{ steps.version.outputs.version }}"
-        Write-Host "🎉 TinyPin $version 构建完成！"
-        Write-Host ""
-        Write-Host "📦 生成的安装包："
-        Get-ChildItem "build\installer\*.exe" | ForEach-Object {
-          $size = [math]::Round($_.Length/1MB, 2)
-          Write-Host "  - $($_.Name) ($size MB)"
-        }
-        
-        if ("${{ github.event_name }}" -eq "push" -and "${{ github.ref }}" -eq "refs/heads/release") {
-          Write-Host ""
-          Write-Host "🚀 已自动发布到 GitHub Releases: ${{ steps.version.outputs.tag }}"
-          Write-Host "🔗 发布页面: https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.tag }}"
-        }
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: TinyPin-${{ steps.version.outputs.version }}-Installers
+          path: |
+            build/installer/*.exe
+          retention-days: 30

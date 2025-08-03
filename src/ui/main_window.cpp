@@ -640,6 +640,8 @@ void MainWnd::evTrayIcon(HWND wnd, WPARAM id, LPARAM msg, Options* opt) {
 
     switch (msg) {
         case WM_LBUTTONUP:
+            // 确保窗口处于前台状态，这对于首次启动后的消息处理很重要
+            SetForegroundWindow(wnd);
             if (!opt->dblClkTray || gotLButtonDblClk) {
                 SendMessage(wnd, WM_COMMAND, CM_NEWPIN, 0);
                 gotLButtonDblClk = false;

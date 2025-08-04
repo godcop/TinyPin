@@ -2,6 +2,7 @@
 #include "pin/pin_shape.h"
 #include "pin/pin_window.h"
 #include "pin/pin_layer_window.h"
+#include "pin/pin_manager.h"
 #include "options/options.h"
 #include "core/application.h"
 #include "resource.h"
@@ -80,6 +81,9 @@ int WINAPI WinMain(HINSTANCE inst, HINSTANCE, LPSTR, int)
     
     // 确保托盘图标被移除
     app.trayIcon.destroy();
+    
+    // 恢复所有被置顶窗口的状态（额外保险措施）
+    Pin::PinManager::restoreAllPinnedWindows();
     
     // 清理所有可能残留的窗口
     HWND pin;

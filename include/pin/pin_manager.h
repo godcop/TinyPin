@@ -27,6 +27,11 @@ namespace Pin {
         // trackRate: 跟踪频率
         // 返回: 成功返回true，失败返回false
         static bool togglePin(HWND wnd, HWND targetWnd, int trackRate);
+        
+        // 恢复所有被图钉置顶的窗口状态
+        // 在应用程序退出时调用，将所有被置顶的窗口恢复为非置顶状态
+        // 返回: 恢复的窗口数量
+        static int restoreAllPinnedWindows();
     };
 
 } // namespace Pin

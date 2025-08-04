@@ -368,6 +368,9 @@ LRESULT MainWnd::handleDestroy(HWND wnd, std::unique_ptr<WindowCreationMonitor>&
         winCreMon.reset();
     }
 
+    // 在移除图钉之前，先恢复所有被置顶窗口的状态
+    Pin::PinManager::restoreAllPinnedWindows();
+    
     SendMessage(wnd, WM_COMMAND, CM_REMOVEPINS, 0);
 
     // 清理所有定时器 - 确保完整清理

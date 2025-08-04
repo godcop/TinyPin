@@ -98,4 +98,29 @@ bool PinManager::togglePin(HWND wnd, HWND target, int trackRate)
     return pinWindow(wnd, target, trackRate);
 }
 
+int PinManager::restoreAllPinnedWindows()
+{
+    int restoredCount = 0;
+    
+    // 枚举所有图钉窗口，获取它们对应的目标窗口
+    HWND pin = nullptr;
+    while ((pin = FindWindowEx(nullptr, pin, PinWnd::className, nullptr)) != nullptr) {
+        // 获取图钉对应的目标窗口
+        HWND targetWnd = HWND(SendMessage(pin, ::App::WM_PIN_GETPINNEDWND, 0, 0));
+        
+        if (targetWnd && IsWindow(targetWnd)) {
+            // 检查目标窗口是否是置顶状态
+            LONG exStyle = GetWindowLong(targetWnd, GWL_EXSTYLE);
+            if (exStyle & WS_EX_TOPMOST) {
+                // 移除置顶状态
+                SetWindowPos(targetWnd, HWND_NOTOPMOST, 0, 0, 0, 0, 
+                           SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                restoredCount++;
+            }
+        }
+    }
+    
+    return restoredCount;
+}
+
 } // namespace Pin

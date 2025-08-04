@@ -166,6 +166,7 @@ Options::Options() :
     trackRate(Constants::DEFAULT_TRACK_RATE_OLD, Constants::MIN_TRACK_RATE, Constants::MAX_TRACK_RATE, Constants::MIN_TRACK_RATE),
     dblClkTray(false),
     runOnStartup(false),
+    bindWindows(false),
     hotkeysOn(true),
     hotEnterPin(App::HOTID_ENTERPINMODE, VK_F11, MOD_CONTROL),
     hotTogglePin(App::HOTID_TOGGLEPIN, VK_F12, MOD_CONTROL),
@@ -288,10 +289,16 @@ bool Options::loadSettingsFromIni()
             trackRate = rate;
         }
     }
-    
+  // 加载托盘双击设置
     value = readUtf8IniValue(iniPath, L"Pins", L"TrayDblClick", L"");
     if (!value.empty()) {
         dblClkTray = (_wtoi(value.c_str()) != 0);
+    }
+    
+    // 加载绑定窗口设置
+    value = readUtf8IniValue(iniPath, L"Pins", L"BindWindows", L"");
+    if (!value.empty()) {
+        bindWindows = (_wtoi(value.c_str()) != 0);
     }
     
     // 加载热键设置
@@ -539,6 +546,8 @@ bool Options::saveFormattedSettingsToIni() const
         file << "TrackRate=" << trackRate.value << "\n";
         file << "; 托盘图标双击行为 (0=单击, 1=双击)\n";
         file << "TrayDblClick=" << (dblClkTray ? 1 : 0) << "\n";
+        file << "; 绑定置顶窗口功能 (0=禁用, 1=启用)\n";
+        file << "BindWindows=" << (bindWindows ? 1 : 0) << "\n";
         file << "\n";
         
         // [Hotkeys] 部分 - 热键设置

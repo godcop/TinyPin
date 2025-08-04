@@ -343,6 +343,9 @@ LRESULT MainWnd::handleCreate(HWND wnd, LPARAM lparam, std::unique_ptr<WindowCre
     // 初始化窗口绑定管理器
     Pin::WindowBindingManager::initialize();
     
+    // 从配置文件加载绑定窗口状态
+    Pin::WindowBindingManager::setBindingEnabled(opt->bindWindows);
+    
     // 初始化图钉计数 - 计算已存在的图钉窗口数量
     int pinCount = 0;
     HWND pin = nullptr;
@@ -736,9 +739,16 @@ void MainWnd::cmRemovePins(HWND wnd) {
 }
 
 void MainWnd::cmBindWindows(HWND wnd) {
+    extern Options opt;
+    
     // 切换绑定状态
     bool currentState = Pin::WindowBindingManager::isBindingEnabled();
-    Pin::WindowBindingManager::setBindingEnabled(!currentState);
+    bool newState = !currentState;
+    Pin::WindowBindingManager::setBindingEnabled(newState);
+    
+    // 更新配置并立即保存
+    opt.bindWindows = newState;
+    opt.saveImmediately();
 }
 
 void MainWnd::cmOptions(HWND wnd, WindowCreationMonitor& winCreMon, Options* opt) {

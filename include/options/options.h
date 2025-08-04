@@ -205,6 +205,7 @@ public:
     IntOption     trackRate;
     bool          dblClkTray;
     bool          runOnStartup;
+    bool          bindWindows;   // 绑定置顶窗口功能状态
     // hotkeys
     bool          hotkeysOn;
     HotKey        hotEnterPin;

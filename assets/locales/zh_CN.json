@@ -86,6 +86,7 @@
   "tray": {
     "pin_mode": "进入图钉模式(&E)",
     "remove_all_pins": "移除所有图钉(&R)",
+    "bind_windows": "绑定置顶窗口(&B)",
     "options": "选项(&O)",
     "about": "关于(&A)",
     "exit": "关闭 微钉(&C)"

@@ -86,9 +86,10 @@
   "tray": {
     "pin_mode": "&Pin-Modus aktivieren",
     "remove_all_pins": "&Alle Pins entfernen",
+    "bind_windows": "&Gepinnte Fenster verbinden",
     "options": "&Optionen",
     "about": "&Über",
-    "exit": "&TinyPin schließen"
+    "close": "&TinyPin schließen"
   },
   "errors": {
     "window_class_registration": "Fensterklasse konnte nicht registriert werden",

@@ -481,6 +481,7 @@ void LanguageManager::initializeControlMappings() {
     // 托盘菜单映射
     m_controlMappings[CM_NEWPIN] = {CM_NEWPIN, L"tray", L"pin_mode"};
     m_controlMappings[CM_REMOVEPINS] = {CM_REMOVEPINS, L"tray", L"remove_all_pins"};
+    m_controlMappings[CM_BINDWINDOWS] = {CM_BINDWINDOWS, L"tray", L"bind_windows"};
     m_controlMappings[CM_OPTIONS] = {CM_OPTIONS, L"tray", L"options"};
     m_controlMappings[CM_ABOUT] = {CM_ABOUT, L"tray", L"about"};
     m_controlMappings[CM_CLOSE] = {CM_CLOSE, L"tray", L"exit"};

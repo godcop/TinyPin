@@ -102,9 +102,10 @@
 
 #define CM_NEWPIN                       11842
 #define CM_REMOVEPINS                   11843
-#define CM_CLOSE                        11844
-#define CM_ABOUT                        11845
-#define CM_OPTIONS                      11846
+#define CM_BINDWINDOWS                  11844
+#define CM_CLOSE                        11845
+#define CM_ABOUT                        11846
+#define CM_OPTIONS                      11847
 
 // Next default values for new objects
 // 

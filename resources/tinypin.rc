@@ -119,6 +119,8 @@ BEGIN
         MENUITEM "&Enter pin mode",             CM_NEWPIN
         MENUITEM "&Remove all pins",            CM_REMOVEPINS
         MENUITEM SEPARATOR
+        MENUITEM "&Bind pinned windows",        CM_BINDWINDOWS
+        MENUITEM SEPARATOR
         MENUITEM "&Options",                 CM_OPTIONS
         MENUITEM SEPARATOR
         MENUITEM "&About",                      CM_ABOUT

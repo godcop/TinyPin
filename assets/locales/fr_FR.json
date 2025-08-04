@@ -86,9 +86,10 @@
   "tray": {
     "pin_mode": "&Entrer en mode épingle",
     "remove_all_pins": "&Supprimer toutes les épingles",
+    "bind_windows": "&Lier les fenêtres épinglées",
     "options": "&Options",
     "about": "&À propos",
-    "exit": "&Fermer TinyPin"
+    "close": "&Fermer TinyPin"
   },
   "errors": {
     "window_class_registration": "Échec de l'enregistrement de la classe de fenêtre",

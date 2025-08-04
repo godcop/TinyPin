@@ -22,6 +22,7 @@ protected:
     // 命令处理方法
     static void cmNewPin(HWND wnd);
     static void cmRemovePins(HWND wnd);
+    static void cmBindWindows(HWND wnd);
     static void cmOptions(HWND wnd, WindowCreationMonitor& winCreMon, Options* opt);
 
 private:

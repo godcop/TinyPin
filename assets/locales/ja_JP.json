@@ -86,9 +86,10 @@
   "tray": {
     "pin_mode": "ピンモードに入る(&E)",
     "remove_all_pins": "すべてのピンを削除(&R)",
+    "bind_windows": "ピン留めウィンドウを連動(&B)",
     "options": "オプション(&O)",
-    "about": "TinyPinについて(&A)",
-    "exit": "TinyPinを終了(&C)"
+    "about": "バージョン情報(&A)",
+    "close": "TinyPinを閉じる(&C)"
   },
   "errors": {
     "window_class_registration": "ウィンドウクラスの登録に失敗しました",

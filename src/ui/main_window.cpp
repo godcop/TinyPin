@@ -5,6 +5,7 @@
 #include "pin/pin_window.h"
 #include "pin/pin_layer_window.h"
 #include "pin/auto_pin_manager.h"
+#include "pin/window_binding_manager.h"
 #include "window/window_monitor.h"
 #include "options/options.h"
 #include "options/options_dialog.h"
@@ -339,6 +340,9 @@ LRESULT MainWnd::handleCreate(HWND wnd, LPARAM lparam, std::unique_ptr<WindowCre
 
     initializeDpiSettings(wnd, opt);
     
+    // 初始化窗口绑定管理器
+    Pin::WindowBindingManager::initialize();
+    
     // 初始化图钉计数 - 计算已存在的图钉窗口数量
     int pinCount = 0;
     HWND pin = nullptr;
@@ -395,6 +399,9 @@ LRESULT MainWnd::handleDestroy(HWND wnd, std::unique_ptr<WindowCreationMonitor>&
         DestroyWindow(app.layerWnd);
         app.layerWnd = nullptr;
     }
+
+    // 清理窗口绑定管理器
+    Pin::WindowBindingManager::cleanup();
 
     PostQuitMessage(0);
     return 0;
@@ -504,6 +511,9 @@ void MainWnd::initializeDpiSettings(HWND wnd, Options* opt) {
 void MainWnd::handlePinStatus(LPARAM lparam) {
     app.pinsUsed += lparam ? 1 : -1;
     
+    // 更新绑定窗口列表
+    Pin::WindowBindingManager::updateBoundWindows();
+    
     if (app.aboutDlg) {
         SendMessage(app.aboutDlg, App::WM_PINSTATUS, 0, 0);
     }
@@ -554,6 +564,9 @@ LRESULT MainWnd::handleCommand(HWND wnd, WPARAM wparam, WindowCreationMonitor& w
             break;
         case CM_REMOVEPINS:
             cmRemovePins(wnd);
+            break;
+        case CM_BINDWINDOWS:
+            cmBindWindows(wnd);
             break;
         case CM_OPTIONS:
             cmOptions(wnd, winCreMon, opt);
@@ -666,6 +679,10 @@ void MainWnd::showTrayContextMenu(HWND wnd) {
     // 本地化菜单文本
     Util::Dialog::localizeMenu(menu, L"tray");
 
+    // 设置绑定窗口菜单项的勾选状态
+    CheckMenuItem(menu, CM_BINDWINDOWS, 
+                  Pin::WindowBindingManager::isBindingEnabled() ? MF_CHECKED : MF_UNCHECKED);
+
     TrayMenuDecorations tmd(menu);
 
     POINT pt;
@@ -713,6 +730,12 @@ void MainWnd::cmRemovePins(HWND wnd) {
         DestroyWindow(pin);
         count++;
     }
+}
+
+void MainWnd::cmBindWindows(HWND wnd) {
+    // 切换绑定状态
+    bool currentState = Pin::WindowBindingManager::isBindingEnabled();
+    Pin::WindowBindingManager::setBindingEnabled(!currentState);
 }
 
 void MainWnd::cmOptions(HWND wnd, WindowCreationMonitor& winCreMon, Options* opt) {

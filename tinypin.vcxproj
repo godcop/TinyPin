@@ -197,6 +197,7 @@
     
     <!-- 图钉模块 -->
     <ClCompile Include="src\pin\pin_manager.cpp" />
+    <ClCompile Include="src\pin\window_binding_manager.cpp" />
     
     <!-- 系统模块 -->
     <ClCompile Include="src\system\language_manager.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="include\pin\pin_shape.h" />
     <ClInclude Include="include\pin\pin_layer_window.h" />
     <ClInclude Include="include\pin\pin_manager.h" />
+    <ClInclude Include="include\pin\window_binding_manager.h" />
     
     <!-- 平台模块头文件 -->
     <ClInclude Include="include\platform\system_info.h" />

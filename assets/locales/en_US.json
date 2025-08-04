@@ -84,11 +84,12 @@
     }
   },
   "tray": {
-    "pin_mode": "&Enter Pin Mode",
-    "remove_all_pins": "&Remove All Pins",
+    "pin_mode": "&Enter pin mode",
+    "remove_all_pins": "&Remove all pins",
+    "bind_windows": "&Bind pinned windows",
     "options": "&Options",
     "about": "&About",
-    "exit": "&Close TinyPin"
+    "close": "&Close TinyPin"
   },
   "errors": {
     "window_class_registration": "Failed to register window class",

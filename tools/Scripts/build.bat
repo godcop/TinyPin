@@ -87,7 +87,7 @@ echo ========================================
 echo 所有平台构建完成！
 echo ========================================
 echo 生成的安装包：
-dir /b "%PROJECT_ROOT%\build\installer\TinyPin-1.0-*-setup.exe" 2>nul
+dir /b "%PROJECT_ROOT%\build\installer\TinyPin-*.*.*-*-setup.exe" 2>nul
 echo.
 echo 编译文件位置：%PROJECT_ROOT%\build\compile\
 echo 安装包位置：%PROJECT_ROOT%\build\installer\

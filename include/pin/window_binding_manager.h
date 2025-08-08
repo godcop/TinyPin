@@ -40,9 +40,6 @@ namespace Pin {
         // 移动所有绑定的窗口（除了触发窗口）
         static void moveAllBoundWindows(HWND movedWindow, int deltaX, int deltaY);
         
-        // 更新窗口位置缓存
-        static void updateWindowPositions();
-        
     public:
         // 初始化窗口绑定管理器
         static bool initialize();
@@ -61,6 +58,9 @@ namespace Pin {
         
         // 检查窗口是否在绑定列表中
         static bool isWindowBound(HWND hwnd);
+        
+        // 更新窗口位置缓存
+        static void updateWindowPositions();
     };
 
 } // namespace Pin

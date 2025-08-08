@@ -50,6 +50,14 @@ bool WindowBindingManager::initialize() {
         return false;
     }
     
+    // 初始化绑定窗口列表
+    updateBoundWindows();
+    
+    // 初始化窗口位置缓存
+    if (s_bindingEnabled) {
+        updateWindowPositions();
+    }
+    
     return true;
 }
 
@@ -141,6 +149,9 @@ void CALLBACK WindowBindingManager::MinimizeEventProc(HWINEVENTHOOK hWinEventHoo
     
     switch (event) {
         case EVENT_SYSTEM_MINIMIZESTART:
+            // 在最小化前，从位置缓存中移除该窗口，防止位置变化事件触发
+            s_windowPositions.erase(hwnd);
+            
             // 窗口开始最小化，最小化所有其他绑定窗口
             minimizeAllBoundWindows(hwnd);
             break;
@@ -149,9 +160,23 @@ void CALLBACK WindowBindingManager::MinimizeEventProc(HWINEVENTHOOK hWinEventHoo
             // 窗口最小化结束（恢复），恢复所有其他绑定窗口
             // 检查窗口是否真的恢复了（而不是最小化）
             if (!IsIconic(hwnd)) {
+                // 先恢复窗口
                 restoreAllBoundWindows(hwnd);
-                // 窗口恢复后，更新窗口位置缓存
-                updateWindowPositions();
+                
+                // 使用定时器延迟更新窗口位置缓存，避免阻塞线程
+                // 创建一个定时器，100ms后更新窗口位置
+                SetTimer(nullptr, reinterpret_cast<UINT_PTR>(hwnd), 100, [](HWND /*hwnd*/, UINT /*uMsg*/, UINT_PTR idEvent, DWORD /*dwTime*/) {
+                    // 获取原始窗口句柄
+                    HWND originalHwnd = reinterpret_cast<HWND>(idEvent);
+                    
+                    // 更新窗口位置缓存
+                    WindowBindingManager::updateWindowPositions();
+                    
+                    // 销毁定时器，防止重复触发
+                    KillTimer(nullptr, idEvent);
+                });
+                
+                // 注意：updateWindowPositions() 将由定时器回调函数调用
             }
             break;
     }
@@ -172,6 +197,11 @@ void CALLBACK WindowBindingManager::MoveEventProc(HWINEVENTHOOK hWinEventHook, D
     
     // 检查触发事件的窗口是否在绑定列表中
     if (!isWindowBound(hwnd)) {
+        return;
+    }
+    
+    // 跳过最小化的窗口，防止最小化窗口的位置变化触发其他窗口移动
+    if (IsIconic(hwnd)) {
         return;
     }
     
@@ -218,13 +248,48 @@ void WindowBindingManager::minimizeAllBoundWindows(HWND excludeWindow) {
 }
 
 void WindowBindingManager::restoreAllBoundWindows(HWND excludeWindow) {
+    // 首先收集所有需要恢复的窗口
+    std::vector<HWND> windowsToRestore;
     for (HWND hwnd : s_boundWindows) {
         if (hwnd != excludeWindow && IsWindow(hwnd) && IsIconic(hwnd)) {
-            // 恢复窗口
-            ShowWindow(hwnd, SW_RESTORE);
-            // 将窗口带到前台
-            SetForegroundWindow(hwnd);
+            windowsToRestore.push_back(hwnd);
         }
+    }
+    
+    // 如果没有窗口需要恢复，直接返回
+    if (windowsToRestore.empty()) {
+        return;
+    }
+    
+    // 获取当前前台窗口的线程ID
+    HWND foregroundWnd = GetForegroundWindow();
+    DWORD foregroundThreadId = GetWindowThreadProcessId(foregroundWnd, NULL);
+    DWORD currentThreadId = GetCurrentThreadId();
+    
+    // 尝试附加线程输入，以绕过SetForegroundWindow的限制
+    bool attachedThreads = false;
+    if (foregroundThreadId != currentThreadId) {
+        attachedThreads = AttachThreadInput(currentThreadId, foregroundThreadId, TRUE) != 0;
+    }
+    
+    // 恢复所有窗口
+    for (HWND hwnd : windowsToRestore) {
+        // 恢复窗口
+        ShowWindow(hwnd, SW_RESTORE);
+        
+        // 尝试将窗口带到前台
+        // 使用多种方法提高成功率
+        SetForegroundWindow(hwnd);
+        
+        // 如果窗口是TOPMOST，确保它保持TOPMOST状态
+        if (Window::isTopMost(hwnd)) {
+            SetWindowPos(hwnd, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+        }
+    }
+    
+    // 如果附加了线程输入，分离它们
+    if (attachedThreads) {
+        AttachThreadInput(currentThreadId, foregroundThreadId, FALSE);
     }
 }
 
@@ -246,7 +311,7 @@ void WindowBindingManager::moveAllBoundWindows(HWND movedWindow, int deltaX, int
         int newX = currentRect.left + deltaX;
         int newY = currentRect.top + deltaY;
         
-        // 移动窗口
+        // 移动窗口，使用MoveWindow而不是SetWindowPos，避免改变Z顺序
         RECT newRect = {
             newX,
             newY,
@@ -272,13 +337,20 @@ void WindowBindingManager::updateWindowPositions() {
     
     // 遍历所有绑定窗口，更新位置缓存
     for (HWND hwnd : s_boundWindows) {
+        // 只处理有效的、非最小化的窗口
         if (IsWindow(hwnd) && !IsIconic(hwnd)) {
             RECT rect;
             if (GetWindowRect(hwnd, &rect)) {
-                s_windowPositions[hwnd] = {rect.left, rect.top};
+                // 确保窗口位置有效（非零）
+                if (rect.left != 0 || rect.top != 0) {
+                    s_windowPositions[hwnd] = {rect.left, rect.top};
+                }
             }
         }
     }
+    
+    // 如果位置缓存为空，可能是所有窗口都最小化了
+    // 这种情况下不需要特殊处理，等窗口恢复后会重新填充缓存
 }
 
 } // namespace Pin
